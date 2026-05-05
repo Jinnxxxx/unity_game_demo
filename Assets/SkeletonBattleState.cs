@@ -19,8 +19,6 @@ public class SkeletonBattleState : EnemyState
 
 
         player = GameObject.Find("Player").transform;
-
-
     }
 
     public override void Update()
