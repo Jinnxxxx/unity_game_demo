@@ -14,6 +14,7 @@ public class SkeletonAttackState : EnemyState
     public override void Enter()
     {
         base.Enter();
+        // Debug.Log("enter Attack State");
     }
 
     public override void Exit()

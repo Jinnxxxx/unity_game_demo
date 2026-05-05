@@ -11,6 +11,7 @@ public class SkeletonMoveState : SkeletonGroundedState
     public override void Enter()
     {
         base.Enter();
+        // Debug.Log("enter move state");
     }
 
     public override void Exit()

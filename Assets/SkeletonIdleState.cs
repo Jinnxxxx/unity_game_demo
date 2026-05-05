@@ -11,6 +11,7 @@ public class SkeletonIdleState : SkeletonGroundedState
     public override void Enter()
     {
         base.Enter();
+        // Debug.Log("enter idle state");
 
         stateTimer = enemy.idleTime;
     }
