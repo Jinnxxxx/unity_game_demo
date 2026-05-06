@@ -12,6 +12,8 @@ public class Entity : MonoBehaviour
     #endregion
 
     [Header("Collision info")]
+    public Transform attackCheck;
+    public float attackCheckRadius;
     //地面检测
     [SerializeField] protected Transform groundCheck;
     [SerializeField] protected float groundCheckDistance;
@@ -41,6 +43,11 @@ public class Entity : MonoBehaviour
 
     }
 
+    public virtual void Damage()
+    {
+        Debug.Log(gameObject.name + "   was damaged");
+    }
+
     #region Velocity
     //速度归0
     public void SetZeroVelocity() => rb.velocity = Vector2.zero;
@@ -65,6 +72,7 @@ public class Entity : MonoBehaviour
     {
         Gizmos.DrawLine(groundCheck.position, new Vector3(groundCheck.position.x, groundCheck.position.y - groundCheckDistance));
         Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + wallCheckDistance, wallCheck.position.y));
+        Gizmos.DrawWireSphere(attackCheck.position, attackCheckRadius);
     }
     #endregion
 
