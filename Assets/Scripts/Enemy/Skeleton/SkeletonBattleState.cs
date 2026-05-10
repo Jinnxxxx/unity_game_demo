@@ -67,7 +67,7 @@ public class SkeletonBattleState : EnemyState
             return true;
         }
 
-        Debug.Log("attack cooldown not finished");
+        // Debug.Log("attack cooldown not finished");
         return false;
     }
 }
