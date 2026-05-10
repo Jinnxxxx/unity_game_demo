@@ -253,6 +253,7 @@ GameObject:
   - component: {fileID: 279328717}
   - component: {fileID: 279328720}
   - component: {fileID: 279328719}
+  - component: {fileID: 279328721}
   m_Layer: 7
   m_Name: Enemy_Skeleton
   m_TagString: Untagged
@@ -272,6 +273,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a4bf60995865724b918183d033776c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  knockbackDirection: {x: 7, y: 12}
+  knockbackDuration: 0.07
   attackCheck: {fileID: 926335993}
   attackCheckRadius: 0.8
   groundCheck: {fileID: 2128508095}
@@ -370,7 +373,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 4
+  m_GravityScale: 12
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -382,6 +385,20 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!114 &279328721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 279328716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b61106c1eff7fce4c98a0f5cae68f291, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flashDuration: 0.2
+  hitMat: {fileID: 2100000, guid: 6f6613592b922864bbf08a0914d562ea, type: 2}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -469,7 +486,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.8999996, y: 2.1999998, z: -10}
+  m_LocalPosition: {x: 4.5300026, y: 2.1999998, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5287,7 +5304,7 @@ Transform:
   m_GameObject: {fileID: 1346234336}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.8999996, y: 2.1999998, z: -10}
+  m_LocalPosition: {x: 4.5300026, y: 2.1999998, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6365,6 +6382,7 @@ GameObject:
   - component: {fileID: 1981794787}
   - component: {fileID: 1981794790}
   - component: {fileID: 1981794789}
+  - component: {fileID: 1981794791}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -6384,6 +6402,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ad9657f3f1d4f94db04ff5daaae2c71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  knockbackDirection: {x: 0, y: 0}
+  knockbackDuration: 0
   attackCheck: {fileID: 617827544}
   attackCheckRadius: 0.8
   groundCheck: {fileID: 686991122}
@@ -6485,6 +6505,20 @@ CapsuleCollider2D:
   m_Offset: {x: -0.038422108, y: -0.032933235}
   m_Size: {x: 0.8403096, y: 2.0758176}
   m_Direction: 0
+--- !u!114 &1981794791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1981794786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b61106c1eff7fce4c98a0f5cae68f291, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flashDuration: 0.15
+  hitMat: {fileID: 2100000, guid: 6f6613592b922864bbf08a0914d562ea, type: 2}
 --- !u!1 &2052193032
 GameObject:
   m_ObjectHideFlags: 0
