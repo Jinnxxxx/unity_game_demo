@@ -31,6 +31,7 @@ public class PlayerAirState : PlayerState
         if (player.IsGroundDetected())
             stateMachine.ChangeState(player.idleState);
 
+        //悬空时左右移动
         if (xInput != 0)
             player.SetVelocity(xInput * player.moveSpeed * .8f, rb.velocity.y);
     }

@@ -16,6 +16,7 @@ public class Player : Entity
     [Header("Move info")]
     public float moveSpeed = 12f;
     public float jumpForce;
+    public float swordReturnImpact;
 
 
     [Header("Dash info")]
@@ -25,6 +26,7 @@ public class Player : Entity
 
 
     public SkillManager skill { get; private set; }
+    public GameObject sword { get; private set; }
 
     //状态(机)
     #region States
@@ -84,6 +86,19 @@ public class Player : Entity
         CheckForDashInput();
     }
 
+    //注册新剑
+    public void AssignNewSword(GameObject _newsword)
+    {
+        sword = _newsword;
+    }
+    //销毁剑
+    public void CatchTheSword()
+    {
+        stateMachine.ChangeState(catchSword);
+        Destroy(sword);
+    }
+
+    //协程（限制行为条件）
     public IEnumerator BusyFor(float _seconds)
     {
         isBusy = true;
