@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,11 +13,24 @@ public enum SwordType
 
 public class Sword_Skill : Skill
 {
-    public SwordType swordType = SwordType.Regular;
+    public SwordType swordType = SwordType.Regular; //剑的类型（默认为普通剑）
 
+    // 弹跳剑参数
     [Header("Bounce info")]
-    [SerializeField]private float amountOfBounce;
+    [SerializeField] private int bounceAmount;
     [SerializeField] private float bounceGravity;
+
+    // 穿刺剑参数
+    [Header("Pierce info")]
+    [SerializeField] private int pierceAmount;
+    [SerializeField] private float pierceGravity;
+
+    // 旋转剑参数
+    [Header("Spin info")]
+    [SerializeField] private float hitCooldown = .35f;
+    [SerializeField] private float maxTravelDistance = 7;
+    [SerializeField] private float spinDuration = 2;
+    [SerializeField] private float spinGravity = 1;
 
 
 
@@ -43,8 +57,20 @@ public class Sword_Skill : Skill
         base.Start();
 
         GenerateDots();
+
+        SetupGravity();
     }
 
+    // 设置不同剑类型的gravity
+    private void SetupGravity()
+    {
+        if (swordType == SwordType.Bounce)
+            swordGravity = bounceGravity;
+        else if (swordType == SwordType.Pierce)
+            swordGravity = pierceGravity;
+        else if (swordType == SwordType.Spin)
+            swordGravity = spinGravity;
+    }
 
     protected override void Update()
     {
@@ -71,17 +97,22 @@ public class Sword_Skill : Skill
         Sword_Skill_Controller newSwordScript = newSword.GetComponent<Sword_Skill_Controller>();
 
 
-        if(swordType == SwordType.Bounce)
-        {
-            
-        }
+        //设置剑的类型(传参为后初始化准备)
+        if (swordType == SwordType.Bounce)
+            newSwordScript.SetupBounce(true, bounceAmount);
+        else if (swordType == SwordType.Pierce)
+            newSwordScript.SetupPierce(pierceAmount);
+        else if (swordType == SwordType.Spin)
+            newSwordScript.SetupSpin(true, maxTravelDistance, spinDuration, hitCooldown);
 
 
-
+        //初始化剑
         newSwordScript.SetupSword(finalDir, swordGravity, player);
 
+        //给Player的sword赋值
         player.AssignNewSword(newSword);
 
+        //松开右键后，隐藏瞄准点
         DotsActivate(false);
     }
 
