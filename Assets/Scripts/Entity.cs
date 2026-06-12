@@ -55,7 +55,7 @@ public class Entity : MonoBehaviour
         fx.StartCoroutine("FlashFX");
         StartCoroutine("HitKnockback");
 
-        Debug.Log(gameObject.name + "   was damaged");
+        // Debug.Log(gameObject.name + "   was damaged");
     }
 
     //受击位移

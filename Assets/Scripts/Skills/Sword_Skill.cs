@@ -19,6 +19,7 @@ public class Sword_Skill : Skill
     [Header("Bounce info")]
     [SerializeField] private int bounceAmount;
     [SerializeField] private float bounceGravity;
+    [SerializeField] private float bounceSpeed;
 
     // 穿刺剑参数
     [Header("Pierce info")]
@@ -33,11 +34,12 @@ public class Sword_Skill : Skill
     [SerializeField] private float spinGravity = 1;
 
 
-
     [Header("Skill info")]
     [SerializeField] private GameObject swordPrefab;
     [SerializeField] private Vector2 launchForce;
     [SerializeField] private float swordGravity;
+    [SerializeField] private float freezeTimeDuration;
+    [SerializeField] private float returnSpeed;
 
     //发射剑最终方向
     private Vector2 finalDir;
@@ -56,9 +58,9 @@ public class Sword_Skill : Skill
     {
         base.Start();
 
-        GenerateDots();
+        GenerateDots(); //生成瞄准点（不显示）
 
-        SetupGravity();
+        SetupGravity(); //设置不同剑类型的gravity
     }
 
     // 设置不同剑类型的gravity
@@ -99,7 +101,7 @@ public class Sword_Skill : Skill
 
         //设置剑的类型(传参为后初始化准备)
         if (swordType == SwordType.Bounce)
-            newSwordScript.SetupBounce(true, bounceAmount);
+            newSwordScript.SetupBounce(true, bounceAmount, bounceSpeed);
         else if (swordType == SwordType.Pierce)
             newSwordScript.SetupPierce(pierceAmount);
         else if (swordType == SwordType.Spin)
@@ -107,7 +109,7 @@ public class Sword_Skill : Skill
 
 
         //初始化剑
-        newSwordScript.SetupSword(finalDir, swordGravity, player);
+        newSwordScript.SetupSword(finalDir, swordGravity, player, freezeTimeDuration,returnSpeed);
 
         //给Player的sword赋值
         player.AssignNewSword(newSword);

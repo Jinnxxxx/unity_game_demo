@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Sword_Skill_Controller : MonoBehaviour
 {
-    [SerializeField] private float returnSpeed = 12;
     private Animator anim;
     private Rigidbody2D rb;
     private CircleCollider2D cd;
@@ -14,6 +13,9 @@ public class Sword_Skill_Controller : MonoBehaviour
     private bool canRotate = true;
     private bool isReturning;
 
+    private float freezeTimeDuration;
+    private float returnSpeed = 12;
+
     // 穿刺剑信息
     [Header("Pierce info")]
     private float pierceAmount;
@@ -21,7 +23,7 @@ public class Sword_Skill_Controller : MonoBehaviour
 
     // 弹跳剑信息
     [Header("Bounce info")]
-    [SerializeField] private float bounceSpeed;
+    private float bounceSpeed;
     private bool isBouncing;
     private int bounceAmount;
     private List<Transform> enemyTarget;
@@ -47,10 +49,17 @@ public class Sword_Skill_Controller : MonoBehaviour
         cd = GetComponent<CircleCollider2D>();
     }
 
+    private void DestroyMe()
+    {
+        Destroy(gameObject);
+    }
+
     // 初始化剑的状态
-    public void SetupSword(Vector2 _dir, float _gravityScale, Player _player)
+    public void SetupSword(Vector2 _dir, float _gravityScale, Player _player, float _freezeTimeDuration, float _returnSpeed)
     {
         player = _player;
+        freezeTimeDuration = _freezeTimeDuration;
+        returnSpeed = _returnSpeed;
 
         rb.velocity = _dir;
         rb.gravityScale = _gravityScale;
@@ -59,13 +68,16 @@ public class Sword_Skill_Controller : MonoBehaviour
             anim.SetBool("Rotation", true);
 
         spinDirection = Mathf.Clamp(rb.velocity.x, -1, 1);
+
+        Invoke("DestroyMe", 7);
     }
 
     // 初始化弹跳剑
-    public void SetupBounce(bool _isBouncing, int _amountOfBounces)
+    public void SetupBounce(bool _isBouncing, int _amountOfBounces, float _bounceSpeed)
     {
         isBouncing = _isBouncing;
         bounceAmount = _amountOfBounces;
+        bounceSpeed = _bounceSpeed;
 
         enemyTarget = new List<Transform>();
     }
@@ -121,6 +133,7 @@ public class Sword_Skill_Controller : MonoBehaviour
     {
         if (isSpinning)
         {
+            // 如果剑与玩家的距离大于maxTravelDistance，停止旋转和移动
             if (Vector2.Distance(player.transform.position, transform.position) > maxTravelDistance && !wasStopped)
             {
                 StopWhenSpinning();
@@ -130,11 +143,12 @@ public class Sword_Skill_Controller : MonoBehaviour
             {
                 spinTimer -= Time.deltaTime;
 
+                // 剑停下后，旋转同时以1.5f的速度朝前移动
                 transform.position = Vector2.MoveTowards(transform.position, new Vector2(transform.position.x + spinDirection, transform.position.y), 1.5f * Time.deltaTime);
 
                 if (spinTimer < 0)
                 {
-                    isReturning = true;
+                    isReturning = true; //剑返回
                     isSpinning = false;
                 }
 
@@ -148,7 +162,7 @@ public class Sword_Skill_Controller : MonoBehaviour
                     foreach (var hit in colliders)
                     {
                         if (hit.GetComponent<Enemy>() != null)
-                            hit.GetComponent<Enemy>().Damage(); //造成伤害
+                            SwordSkillDamage(hit.GetComponent<Enemy>());//造成伤害
                     }
                 }
 
@@ -168,12 +182,12 @@ public class Sword_Skill_Controller : MonoBehaviour
     {
         if (isBouncing && enemyTarget.Count > 0)
         {
-            transform.position = Vector2.MoveTowards(transform.position, enemyTarget[targetIndex].position, bounceSpeed * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, enemyTarget[targetIndex].position, bounceSpeed * Time.deltaTime); // 剑朝敌人移动
 
             if (Vector2.Distance(transform.position, enemyTarget[targetIndex].position) < .1f)
             {
                 //返回时造成伤害
-                enemyTarget[targetIndex].GetComponent<Enemy>().Damage();
+                SwordSkillDamage(enemyTarget[targetIndex].GetComponent<Enemy>());
 
                 targetIndex++;
                 // 防止index越界
@@ -198,13 +212,24 @@ public class Sword_Skill_Controller : MonoBehaviour
         if (isReturning)
             return;
 
-        collision.GetComponent<Enemy>()?.Damage();
+
+        if (collision.GetComponent<Enemy>() != null)
+        {
+            Enemy enemy = collision.GetComponent<Enemy>();
+            SwordSkillDamage(enemy);//造成伤害
+        }
 
         // 触碰到敌人，初始化周围敌人list
         SetupTargetForBounce(collision);
 
         StuckInto(collision);
 
+    }
+
+    private void SwordSkillDamage(Enemy enemy)
+    {
+        enemy.Damage();
+        enemy.StartCoroutine("FreezeTimerFor", freezeTimeDuration);
     }
 
     private void SetupTargetForBounce(Collider2D collision)
@@ -225,7 +250,7 @@ public class Sword_Skill_Controller : MonoBehaviour
     }
 
 
-    //剑卡在敌人身上
+    //剑卡在敌人身上（冻结并改为Kinematic）
     private void StuckInto(Collider2D collision)
     {
         // 若为穿刺剑，collide后继续运动      
@@ -242,6 +267,7 @@ public class Sword_Skill_Controller : MonoBehaviour
             return;
         }
 
+        // 若不是前两者，则卡在敌人身上
         canRotate = false;
         cd.enabled = false;
 
