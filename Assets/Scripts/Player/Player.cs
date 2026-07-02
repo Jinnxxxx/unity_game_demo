@@ -45,6 +45,7 @@ public class Player : Entity
 
     public PlayerAimSwordState aimSword { get; private set; }
     public PlayerCatchSwordState catchSword { get; private set; }
+    public PlayerBlackHoleState blackHole { get; private set; }
     #endregion
 
     protected override void Awake()
@@ -66,6 +67,7 @@ public class Player : Entity
 
         aimSword = new PlayerAimSwordState(this, stateMachine, "AimSword");
         catchSword = new PlayerCatchSwordState(this, stateMachine, "CatchSword");
+        blackHole = new PlayerBlackHoleState(this, stateMachine, "Jump");
     }
 
     protected override void Start()
@@ -98,6 +100,12 @@ public class Player : Entity
         Destroy(sword);
     }
 
+    //退出黑洞状态
+    public void ExitBlackHoleAbility()
+    {
+        stateMachine.ChangeState(airState);
+    }
+
     //协程（限制行为条件）
     public IEnumerator BusyFor(float _seconds)
     {
@@ -117,7 +125,6 @@ public class Player : Entity
 
         if (Input.GetKeyDown(KeyCode.LeftShift) && SkillManager.instance.dash.CanUseSkill())
         {
-
             dashDir = Input.GetAxisRaw("Horizontal");
 
             if (dashDir == 0)
@@ -126,12 +133,4 @@ public class Player : Entity
             stateMachine.ChangeState(dashState);
         }
     }
-
-
-
-
-
-
-
-
 }

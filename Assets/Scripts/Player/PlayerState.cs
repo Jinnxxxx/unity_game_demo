@@ -46,6 +46,7 @@ public class PlayerState
     }
 
 
+    // 一般会作用于状态切换的判断条件
     public virtual void AnimationFinishTrigger()
     {
         triggerCalled = true;
