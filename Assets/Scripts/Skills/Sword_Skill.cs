@@ -95,8 +95,8 @@ public class Sword_Skill : Skill
 
     public void CreateSword()
     {
-        GameObject newSword = Instantiate(swordPrefab, player.transform.position, transform.rotation);
-        Sword_Skill_Controller newSwordScript = newSword.GetComponent<Sword_Skill_Controller>();
+        GameObject newSword = Instantiate(swordPrefab, player.transform.position, transform.rotation); //创建prefab实例
+        Sword_Skill_Controller newSwordScript = newSword.GetComponent<Sword_Skill_Controller>(); //获取Sword_Skill_Controller脚本
 
 
         //设置剑的类型(传参为后初始化准备)

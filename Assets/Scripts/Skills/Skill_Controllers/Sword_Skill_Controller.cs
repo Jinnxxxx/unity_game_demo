@@ -182,7 +182,7 @@ public class Sword_Skill_Controller : MonoBehaviour
     {
         if (isBouncing && enemyTarget.Count > 0)
         {
-            transform.position = Vector2.MoveTowards(transform.position, enemyTarget[targetIndex].position, bounceSpeed * Time.deltaTime); // 剑朝敌人移动
+            transform.position = Vector2.MoveTowards(transform.position, enemyTarget[targetIndex].position, bounceSpeed * Time.deltaTime); // 剑朝敌人平滑移动
 
             if (Vector2.Distance(transform.position, enemyTarget[targetIndex].position) < .1f)
             {
@@ -211,7 +211,6 @@ public class Sword_Skill_Controller : MonoBehaviour
         // 如果剑正在返回，不处理碰撞事件
         if (isReturning)
             return;
-
 
         if (collision.GetComponent<Enemy>() != null)
         {

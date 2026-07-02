@@ -44,7 +44,7 @@ public class Enemy : Entity
     }
 
     //冻结时间技能
-    public virtual void FreedzeTime(bool _timeFrozen)
+    public virtual void FreezeTime(bool _timeFrozen)
     {
         if (_timeFrozen)
         {
@@ -57,14 +57,15 @@ public class Enemy : Entity
             anim.speed = 1;
         }
     }
+    
     //冻结时间技能协程
     protected virtual IEnumerator FreezeTimerFor(float _seconds)
     {
-        FreedzeTime(true);
+        FreezeTime(true);
 
         yield return new WaitForSeconds(_seconds);
 
-        FreedzeTime(false);
+        FreezeTime(false);
     }
 
     #region Counter Attack Window
