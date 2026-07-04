@@ -24,19 +24,20 @@ public class Crystal_Skill : Skill
             currentCrystal = Instantiate(crystalPrefab, player.transform.position, Quaternion.identity); //生成（实例化）水晶在玩家当前位置
             Crystal_Skill_Controller currentCrystalScript = currentCrystal.GetComponent<Crystal_Skill_Controller>(); //获取水晶的脚本
 
-            currentCrystalScript.SetupCrystal(crystalDuration, canExplode, canMoveToEnemy, moveSpeed); //设置水晶的持续时间,是否可以爆炸,是否可以移动到敌人,移动速度
+            currentCrystalScript.SetupCrystal(crystalDuration, canExplode, canMoveToEnemy, moveSpeed, FindClosestEnemy(currentCrystal.transform)); //设置水晶的持续时间,是否可以爆炸,是否可以移动到敌人,移动速度,最近的敌人
         }
         else
         {
+            if (canMoveToEnemy)
+                return;
+
             Vector2 playerPos = player.transform.position; //获取玩家当前位置
 
             player.transform.position = currentCrystal.transform.position; //将玩家位置移动到水晶当前位置
 
             currentCrystal.transform.position = playerPos; //将水晶位置移动到玩家当前位置
-            
+
             currentCrystal.GetComponent<Crystal_Skill_Controller>()?.FinishCrystal();
         }
     }
-
-
 }
