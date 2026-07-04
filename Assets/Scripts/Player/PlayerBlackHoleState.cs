@@ -8,6 +8,7 @@ public class PlayerBlackHoleState : PlayerState
     private bool skillUsed; //球技能以使用
 
     private float defaultGravity; //默认重力
+
     public PlayerBlackHoleState(Player _player, PlayerStateMachine _stateMachine, string _animBoolName) : base(_player, _stateMachine, _animBoolName)
     {
     }
@@ -21,7 +22,7 @@ public class PlayerBlackHoleState : PlayerState
     {
         base.Enter();
 
-        defaultGravity = player.rb.gravityScale;
+        defaultGravity = player.rb.gravityScale; //保存默认重力
 
         skillUsed = false;
         stateTimer = flyTime;
@@ -50,14 +51,18 @@ public class PlayerBlackHoleState : PlayerState
             if (!skillUsed)
             {
                 // Debug.Log("CAST BLACKHOLE");
+
                 // 调用黑洞技能的CanUseSkill(UseSkill())方法
                 if (player.skill.blackhole.CanUseSkill())
                     skillUsed = true;
             }
         }
 
-        ////////////////////////////////////////////////////////////////////
-        //在黑洞控制器(Blackhole_Skill_Controller)中，当技能结束后，退出黑洞状态///
-        ////////////////////////////////////////////////////////////////////
+        // 检查黑洞技能是否已经结束,如果是则切换到空中状态
+        if (player.skill.blackhole.SkillCompleted())
+        {
+            stateMachine.ChangeState(player.airState);
+            return;
+        }
     }
 }

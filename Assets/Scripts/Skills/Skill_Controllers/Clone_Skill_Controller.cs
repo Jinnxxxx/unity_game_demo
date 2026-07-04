@@ -11,7 +11,7 @@ public class Clone_Skill_Controller : MonoBehaviour
     private float cloneTimer;
     [SerializeField] private Transform attackCheck;
     [SerializeField] private float attackCheckRadius = .8f;
-    private Transform closestEnemy;
+    private Transform closestEnemy; //最近敌人
 
     private void Awake()
     {
@@ -34,7 +34,7 @@ public class Clone_Skill_Controller : MonoBehaviour
         }
     }
 
-    //初始化克隆体（克隆体的初始位置，克隆体的持续时间，克隆体是否可以攻击）
+    // 初始化克隆体（克隆体的初始位置，克隆体的持续时间，克隆体是否可以攻击,克隆体的偏移量）
     public void SetupClone(Transform _newTransform, float _cloneDuration, bool _canAttack, Vector3 _offset)
     {
         if (_canAttack)
@@ -54,6 +54,7 @@ public class Clone_Skill_Controller : MonoBehaviour
 
     }
 
+    // 攻击触发器（anim添加event调用）
     private void AttackTrigger()
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(attackCheck.position, attackCheckRadius);
@@ -67,13 +68,14 @@ public class Clone_Skill_Controller : MonoBehaviour
     }
 
 
-    //克隆体攻击时方向
+    // 克隆体攻击时方向
     private void FaceClosestTarget()
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 25);
 
         float closestDistance = Mathf.Infinity;
 
+        // 遍历所有敌人，找到最近敌人，计算距离
         foreach (var hit in colliders)
         {
             if (hit.GetComponent<Enemy>() != null)
@@ -88,7 +90,7 @@ public class Clone_Skill_Controller : MonoBehaviour
             }
         }
 
-
+        // sprite默认朝左，如果最近敌人（closestEnemy）在左侧，sprite旋转180度
         if (closestEnemy != null)
         {
             if (transform.position.x > closestEnemy.position.x)

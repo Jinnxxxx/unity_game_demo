@@ -6,9 +6,8 @@ using UnityEngine.UIElements;
 
 public class Player : Entity
 {
-
     [Header("Attack details")]
-    public Vector2[] attackMovement;
+    public Vector2[] attackMovement; //攻击时发生位移
     public float counterAttackDuration = .2f;
 
 
@@ -27,6 +26,7 @@ public class Player : Entity
 
     public SkillManager skill { get; private set; }
     public GameObject sword { get; private set; }
+
 
     //状态(机)
     #region States
@@ -86,6 +86,12 @@ public class Player : Entity
         stateMachine.currentState.Update();
 
         CheckForDashInput();
+
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            skill.crystal.CanUseSkill();
+        }
     }
 
     //注册新剑
@@ -98,12 +104,6 @@ public class Player : Entity
     {
         stateMachine.ChangeState(catchSword);
         Destroy(sword);
-    }
-
-    //退出黑洞状态
-    public void ExitBlackHoleAbility()
-    {
-        stateMachine.ChangeState(airState);
     }
 
     //协程（限制行为条件）

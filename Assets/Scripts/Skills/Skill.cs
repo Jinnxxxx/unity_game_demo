@@ -11,7 +11,7 @@ public class Skill : MonoBehaviour
 
     protected virtual void Start()
     {
-        player = PlayerManager.instance.player;
+        player = PlayerManager.instance.player; //获取player引用
     }
 
     protected virtual void Update()
@@ -20,7 +20,8 @@ public class Skill : MonoBehaviour
     }
 
 
-
+    // check if the skill can be used
+    // if the skill can be used, use the skill and reset the cooldown timer
     public virtual bool CanUseSkill()
     {
         if (cooldownTimer < 0)
@@ -37,7 +38,7 @@ public class Skill : MonoBehaviour
 
     public virtual void UseSkill()
     {
-        //do some skill spesific things
+        //do some skill spesific things！！！
     }
 
 }
