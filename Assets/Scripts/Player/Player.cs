@@ -85,9 +85,11 @@ public class Player : Entity
 
         stateMachine.currentState.Update();
 
+        //按下shift进行冲刺
         CheckForDashInput();
 
 
+        // 
         if (Input.GetKeyDown(KeyCode.F))
         {
             skill.crystal.CanUseSkill();

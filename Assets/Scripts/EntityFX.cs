@@ -18,6 +18,7 @@ public class EntityFX : MonoBehaviour
         orignalMat = sr.material;
     }
 
+    //受击闪烁
     private IEnumerator FlashFX()
     {
         sr.material = hitMat;
@@ -27,6 +28,7 @@ public class EntityFX : MonoBehaviour
         sr.material = orignalMat;
     }
 
+    //弹反成功红色闪烁
     private void RedColorBlink()
     {
         if (sr.color != Color.white)
@@ -35,6 +37,7 @@ public class EntityFX : MonoBehaviour
             sr.color = Color.red;
     }
 
+    //弹反成功结束后恢复颜色
     private void CancelRedBlink()
     {
         CancelInvoke();

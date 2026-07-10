@@ -1,9 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerCounterAttackState : PlayerState
 {
+
+    private bool canCreateClone; //限制克隆创建数量
+
     public PlayerCounterAttackState(Player _player, PlayerStateMachine _stateMachine, string _animBoolName) : base(_player, _stateMachine, _animBoolName)
     {
     }
@@ -12,8 +13,9 @@ public class PlayerCounterAttackState : PlayerState
     {
         base.Enter();
 
-        stateTimer = player.counterAttackDuration;
-        player.anim.SetBool("SuccessfulCounterAttack", false);
+        canCreateClone = true;
+        stateTimer = player.counterAttackDuration; //反击持续时间
+        player.anim.SetBool("SuccessfulCounterAttack", false); //重置反击成功动画
     }
 
     public override void Exit()
@@ -28,20 +30,25 @@ public class PlayerCounterAttackState : PlayerState
         player.SetZeroVelocity();
 
         Collider2D[] colliders = Physics2D.OverlapCircleAll(player.attackCheck.position, player.attackCheckRadius);
-
         foreach (var hit in colliders)
         {
             if (hit.GetComponent<Enemy>() != null)
             {
-                if (hit.GetComponent<Enemy>().CanBeStunned())
+                if (hit.GetComponent<Enemy>().CanBeStunned()) //反击成功
                 {
-                    stateTimer = 10; //足够长 
-                    player.anim.SetBool("SuccessfulCounterAttack", true);
+                    stateTimer = 10; //防止过早退出
+                    player.anim.SetBool("SuccessfulCounterAttack", true); //进入反击成功动画
+
+                    if (canCreateClone)
+                    {
+                        canCreateClone = false; //克隆创建数量限制
+                        player.skill.clone.CreateCloneOnCounterAttack(hit.transform); //反击成功后创建克隆}
+                    }
                 }
             }
-        }
 
-        if (stateTimer < 0 || triggerCalled)
-            stateMachine.ChangeState(player.idleState);
+            if (stateTimer < 0 || triggerCalled)
+                stateMachine.ChangeState(player.idleState);
+        }
     }
 }

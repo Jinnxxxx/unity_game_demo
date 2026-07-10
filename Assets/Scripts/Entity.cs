@@ -31,7 +31,7 @@ public class Entity : MonoBehaviour
     [SerializeField] protected LayerMask whatIsGround;
 
     //角色方向
-    public int facingDir { get; private set; } = 1;
+    public int facingDir { get; private set; } = 1; // 1: 右  -1: 左
     protected bool facingRight = true;
 
     protected virtual void Awake()
@@ -52,10 +52,11 @@ public class Entity : MonoBehaviour
 
     }
 
+    //伤害函数
     public virtual void Damage()
     {
-        fx.StartCoroutine("FlashFX");
-        StartCoroutine("HitKnockback");
+        fx.StartCoroutine("FlashFX"); //受击闪烁
+        StartCoroutine("HitKnockback"); //受击位移
 
         // Debug.Log(gameObject.name + "   was damaged");
     }
@@ -139,7 +140,5 @@ public class Entity : MonoBehaviour
         else
             sr.color = Color.white;
     }
-
-
 
 }
