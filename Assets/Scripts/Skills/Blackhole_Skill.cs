@@ -46,15 +46,17 @@ public class Blackhole_Skill : Skill
     //检查黑洞技能是否完成
     public bool SkillCompleted()
     {
+        //如果黑洞控制器组件为空，返回false
         if (!currentBlackhole)
-            return false; //如果黑洞控制器组件为空，返回false
+            return false;
 
+        //如果黑洞控制器的playerCanExitState属性为true，返回true，并清除黑洞控制器组件
         if (currentBlackhole.playerCanExitState)
         {
-            currentBlackhole = null; //清除黑洞控制器组件
-            return true; //如果玩家已经退出黑洞状态，返回true
+            currentBlackhole = null;
+            return true;
         }
 
-        return false; //否则返回false
+        return false;
     }
 }

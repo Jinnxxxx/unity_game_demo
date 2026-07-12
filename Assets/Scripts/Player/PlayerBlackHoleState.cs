@@ -5,17 +5,12 @@ using UnityEngine;
 public class PlayerBlackHoleState : PlayerState
 {
     private float flyTime = .4f; //发动黑洞技能时，player飞行时间
-    private bool skillUsed; //球技能以使用
+    private bool skillUsed; //确保技能只使用一次
 
     private float defaultGravity; //默认重力
 
     public PlayerBlackHoleState(Player _player, PlayerStateMachine _stateMachine, string _animBoolName) : base(_player, _stateMachine, _animBoolName)
     {
-    }
-
-    public override void AnimationFinishTrigger()
-    {
-        base.AnimationFinishTrigger();
     }
 
     public override void Enter()
@@ -26,7 +21,7 @@ public class PlayerBlackHoleState : PlayerState
 
         skillUsed = false;
         stateTimer = flyTime;
-        rb.gravityScale = 0f;
+        rb.gravityScale = 0f; //重力设置为0
     }
 
     public override void Exit()
@@ -43,15 +38,12 @@ public class PlayerBlackHoleState : PlayerState
 
         if (stateTimer > 0)
             rb.velocity = new Vector2(0, 15);
-
         if (stateTimer < 0)
         {
             rb.velocity = new Vector2(0, -.1f);
 
             if (!skillUsed)
             {
-                // Debug.Log("CAST BLACKHOLE");
-
                 // 调用黑洞技能的CanUseSkill(UseSkill())方法
                 if (player.skill.blackhole.CanUseSkill())
                     skillUsed = true;

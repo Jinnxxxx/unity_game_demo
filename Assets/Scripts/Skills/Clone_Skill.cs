@@ -17,12 +17,22 @@ public class Clone_Skill : Skill
     [Header("Clone can duplicate")]
     [SerializeField] private bool canDuplicateClone; //是否可以再次克隆
     [SerializeField] private float chanceToDuplicate; //再次克隆几率
+    [Header("Crystal instead of clone")]
+    [SerializeField] private bool crystalInsteadOfClone; //是否使用水晶代替克隆
 
 
     public void CreateClone(Transform _clonePosition, Vector3 _offset)
     {
+
+        if (crystalInsteadOfClone)
+        {
+            SkillManager.instance.crystal.CreateCrystal();
+            return; //如果使用水晶代替克隆，直接返回
+        }
+
+
         //GameObject newClone = Instantiate(clonePrefab);
-        GameObject newClone = Instantiate(clonePrefab, player.transform.position, Quaternion.identity);
+        GameObject newClone = Instantiate(clonePrefab, player.transform.position, Quaternion.identity); //self_fix
 
         newClone.GetComponent<Clone_Skill_Controller>().SetupClone(_clonePosition, cloneDuration, canAttack, _offset, FindClosestEnemy(newClone.transform), canDuplicateClone, chanceToDuplicate);
     }

@@ -31,7 +31,7 @@ public class Skill : MonoBehaviour
             return true;
         }
 
-        Debug.Log("Skill is on cooldown");
+        Debug.Log("Skill " + this.GetType().Name + " is on cooldown");
         return false;
     }
 
@@ -64,7 +64,7 @@ public class Skill : MonoBehaviour
                 }
             }
         }
-        
+
         return closestEnemy; // 返回最近敌人
     }
 }

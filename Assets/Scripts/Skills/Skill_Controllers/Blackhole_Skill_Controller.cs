@@ -24,7 +24,7 @@ public class Blackhole_Skill_Controller : MonoBehaviour
     private float cloneAttackTimer;
 
     private List<Transform> targets = new List<Transform>(); //触碰到的敌人列表
-    private List<GameObject> createdHotKey = new List<GameObject>(); //生成的热键列表
+    private List<GameObject> createdHotKey = new List<GameObject>(); //生成的热键GameObject列表
 
     public bool playerCanExitState { get; private set; } //玩家是否可以退出黑洞状态
 
@@ -125,13 +125,13 @@ public class Blackhole_Skill_Controller : MonoBehaviour
     // 黑洞结束步骤
     private void FinishBlackHoleAbility()
     {
-        DestroyHotKeys(); //销毁热键
+        DestroyHotKeys(); //销毁createdHotKey列表中的热键
         playerCanExitState = true; //克隆攻击耗尽后，玩家可以退出黑洞状态
         canShrink = true; //克隆攻击耗尽后，自动缩小黑洞
         cloneAttackReleased = false;
     }
 
-    // 销毁热键
+    // 集中销毁热键
     private void DestroyHotKeys()
     {
         if (createdHotKey.Count <= 0)

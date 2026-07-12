@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class Crystal_Skill : Skill
@@ -25,21 +26,30 @@ public class Crystal_Skill : Skill
     [SerializeField] private float useTimeWindow; //多水晶使用窗口时间
     [SerializeField] private List<GameObject> crystalLeft = new List<GameObject>(); //剩余的水晶列表
 
+    private float originalCooldown; //保存原始冷却时间(self_fix)
+
+    protected override void Start()
+    {
+        base.Start();
+        originalCooldown = cooldown; //保存原始冷却时间(self_fix)
+    }
+
     public override void UseSkill()
     {
         base.UseSkill();
+        
+        if (!CanUseMultiCrystal())
+            cooldown = originalCooldown; //若不能使用多水晶，则恢复原始冷却时间(self_fix)
 
         // 检查是否可以使用多水晶,若为真后面代码不工作
         if (CanUseMultiCrystal())
             return;
 
 
+
         if (currentCrystal == null)
         {
-            currentCrystal = Instantiate(crystalPrefab, player.transform.position, Quaternion.identity); //生成（实例化）水晶在玩家当前位置
-            Crystal_Skill_Controller currentCrystalScript = currentCrystal.GetComponent<Crystal_Skill_Controller>(); //获取水晶的脚本
-
-            currentCrystalScript.SetupCrystal(crystalDuration, canExplode, canMoveToEnemy, moveSpeed, FindClosestEnemy(currentCrystal.transform)); //设置水晶的持续时间,是否可以爆炸,是否可以移动到敌人,移动速度,最近的敌人
+            CreateCrystal();
         }
         else
         {
@@ -60,6 +70,14 @@ public class Crystal_Skill : Skill
                 currentCrystal.GetComponent<Crystal_Skill_Controller>()?.FinishCrystal();
             }
         }
+    }
+
+    public void CreateCrystal()
+    {
+        currentCrystal = Instantiate(crystalPrefab, player.transform.position, Quaternion.identity); //生成（实例化）水晶在玩家当前位置
+        Crystal_Skill_Controller currentCrystalScript = currentCrystal.GetComponent<Crystal_Skill_Controller>(); //获取水晶的脚本
+
+        currentCrystalScript.SetupCrystal(crystalDuration, canExplode, canMoveToEnemy, moveSpeed, FindClosestEnemy(currentCrystal.transform)); //设置水晶的持续时间,是否可以爆炸,是否可以移动到敌人,移动速度,最近的敌人
     }
 
 

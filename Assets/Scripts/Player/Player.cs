@@ -88,13 +88,13 @@ public class Player : Entity
         //按下shift进行冲刺
         CheckForDashInput();
 
-
-        // 
+        // 按下F使用水晶技能
         if (Input.GetKeyDown(KeyCode.F))
         {
             skill.crystal.CanUseSkill();
         }
     }
+
 
     //注册新剑
     public void AssignNewSword(GameObject _newsword)
@@ -108,7 +108,8 @@ public class Player : Entity
         Destroy(sword);
     }
 
-    //协程（限制行为条件）
+
+    //协程（延时）
     public IEnumerator BusyFor(float _seconds)
     {
         isBusy = true;
@@ -125,7 +126,7 @@ public class Player : Entity
         if (IsWalldetected())
             return;
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && SkillManager.instance.dash.CanUseSkill())
+        if (Input.GetKeyDown(KeyCode.LeftShift) && SkillManager.instance.dash.CanUseSkill()) //按下shift切dash的cd小于0
         {
             dashDir = Input.GetAxisRaw("Horizontal");
 

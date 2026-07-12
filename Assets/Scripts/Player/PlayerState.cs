@@ -25,7 +25,7 @@ public class PlayerState
 
     public virtual void Enter()
     {
-        player.anim.SetBool(animBoolName, true);
+        player.anim.SetBool(animBoolName, true); //进入状态动画
         rb = player.rb;
         triggerCalled = false;
     }
@@ -36,7 +36,7 @@ public class PlayerState
 
         xInput = Input.GetAxisRaw("Horizontal");
         yInput = Input.GetAxisRaw("Vertical");
-        player.anim.SetFloat("yVelocity", rb.velocity.y);
+        player.anim.SetFloat("yVelocity", rb.velocity.y); //传参设置y轴速度，改变动画
 
     }
 
@@ -46,7 +46,7 @@ public class PlayerState
     }
 
 
-    // 一般会作用于状态切换的判断条件
+    // 一般作用于状态切换的判断条件（anim的event调用）
     public virtual void AnimationFinishTrigger()
     {
         triggerCalled = true;

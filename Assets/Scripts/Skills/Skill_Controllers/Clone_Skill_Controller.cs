@@ -51,8 +51,7 @@ public class Clone_Skill_Controller : MonoBehaviour
         canDuplicateClone = _canDuplicate;
         chanceToDuplicate = _chanceToDuplicate;
         //closestEnemy = _closestEnemy;
-        closestEnemy = FindClosestEnemy(); //TEST
-
+        closestEnemy = FindClosestEnemy(); //self_fix
         FaceClosestTarget();
     }
 
@@ -104,8 +103,8 @@ public class Clone_Skill_Controller : MonoBehaviour
 
     }
 
-    //TEST
-    // 寻找最近的敌人
+
+    // 寻找最近的敌人（self_fix）
     private Transform FindClosestEnemy()
     {
         Debug.Log(transform.position);
@@ -128,7 +127,6 @@ public class Clone_Skill_Controller : MonoBehaviour
                 }
             }
         }
-
         return closestEnemy; // 返回最近敌人
     }
 

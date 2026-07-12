@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hotKeyPrefab: {fileID: 379931178290637681, guid: ee6f1eea026f9b944b74de968034d734, type: 3}
-  keyCodeList: 7100000077000000650000006600000074000000
+  keyCodeList: 7100000077000000650000007400000066000000
 --- !u!58 &222610171941944024
 CircleCollider2D:
   m_ObjectHideFlags: 0
