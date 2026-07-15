@@ -78,6 +78,7 @@ public class Crystal_Skill : Skill
         Crystal_Skill_Controller currentCrystalScript = currentCrystal.GetComponent<Crystal_Skill_Controller>(); //获取水晶的脚本
 
         currentCrystalScript.SetupCrystal(crystalDuration, canExplode, canMoveToEnemy, moveSpeed, FindClosestEnemy(currentCrystal.transform)); //设置水晶的持续时间,是否可以爆炸,是否可以移动到敌人,移动速度,最近的敌人
+        currentCrystalScript.ChooseRandomEnemy(); //选择范围内随机敌人
     }
 
 

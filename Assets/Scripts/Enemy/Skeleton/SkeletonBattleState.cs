@@ -26,7 +26,7 @@ public class SkeletonBattleState : EnemyState
 
         if (enemy.isPlayerDetected())
         {
-            stateTimer = enemy.battleTime;
+            stateTimer = enemy.battleTime; 
 
             if (enemy.isPlayerDetected().distance < enemy.attackDistance)
             {

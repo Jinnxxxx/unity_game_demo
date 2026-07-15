@@ -19,6 +19,7 @@ public class Crystal_Skill_Controller : MonoBehaviour
     private float growSpeed = 5; // 变大速度
 
     private Transform closestTarget; // 最近的目标
+    [SerializeField] private LayerMask whatIsEnemy; // 敌人层掩码
 
     // 水晶参数初始化
     public void SetupCrystal(float _crystalDuration, bool _canExplode, bool _canMove, float _moveSpeed, Transform _closestTarget)
@@ -28,6 +29,16 @@ public class Crystal_Skill_Controller : MonoBehaviour
         canMove = _canMove;
         moveSpeed = _moveSpeed;
         closestTarget = _closestTarget;
+    }
+
+
+    //在范围内随机选择敌人
+    public void ChooseRandomEnemy()
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 25, whatIsEnemy);
+
+        if (colliders.Length > 0)
+            closestTarget = colliders[Random.Range(0, colliders.Length)].transform;
     }
 
 
