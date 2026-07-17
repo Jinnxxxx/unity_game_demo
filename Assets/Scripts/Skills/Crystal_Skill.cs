@@ -37,7 +37,7 @@ public class Crystal_Skill : Skill
     public override void UseSkill()
     {
         base.UseSkill();
-        
+
         if (!CanUseMultiCrystal())
             cooldown = originalCooldown; //若不能使用多水晶，则恢复原始冷却时间(self_fix)
 
@@ -77,9 +77,14 @@ public class Crystal_Skill : Skill
         currentCrystal = Instantiate(crystalPrefab, player.transform.position, Quaternion.identity); //生成（实例化）水晶在玩家当前位置
         Crystal_Skill_Controller currentCrystalScript = currentCrystal.GetComponent<Crystal_Skill_Controller>(); //获取水晶的脚本
 
-        currentCrystalScript.SetupCrystal(crystalDuration, canExplode, canMoveToEnemy, moveSpeed, FindClosestEnemy(currentCrystal.transform)); //设置水晶的持续时间,是否可以爆炸,是否可以移动到敌人,移动速度,最近的敌人
-        currentCrystalScript.ChooseRandomEnemy(); //选择范围内随机敌人
+        //设置水晶的持续时间,是否可以爆炸,是否可以移动到敌人,移动速度,最近的敌人
+        currentCrystalScript.SetupCrystal(crystalDuration, canExplode, canMoveToEnemy, moveSpeed, FindClosestEnemy(currentCrystal.transform));
+
+        
     }
+
+    //选择范围内随即目标
+    public void CurrentCrystalChooseRandomTarget() => currentCrystal.GetComponent<Crystal_Skill_Controller>().ChooseRandomEnemy();
 
 
     // 检查是否可以使用多水晶

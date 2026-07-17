@@ -18,7 +18,7 @@ public class Clone_Skill : Skill
     [SerializeField] private bool canDuplicateClone; //是否可以再次克隆
     [SerializeField] private float chanceToDuplicate; //再次克隆几率
     [Header("Crystal instead of clone")]
-    [SerializeField] private bool crystalInsteadOfClone; //是否使用水晶代替克隆
+    public bool crystalInsteadOfClone; //是否使用水晶代替克隆
 
 
     public void CreateClone(Transform _clonePosition, Vector3 _offset)

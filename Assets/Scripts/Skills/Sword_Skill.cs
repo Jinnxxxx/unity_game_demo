@@ -109,7 +109,7 @@ public class Sword_Skill : Skill
 
 
         //初始化剑
-        newSwordScript.SetupSword(finalDir, swordGravity, player, freezeTimeDuration,returnSpeed);
+        newSwordScript.SetupSword(finalDir, swordGravity, player, freezeTimeDuration, returnSpeed);
 
         //给Player的sword赋值
         player.AssignNewSword(newSword);

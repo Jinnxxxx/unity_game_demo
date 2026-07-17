@@ -38,6 +38,10 @@ public class Blackhole_Skill_Controller : MonoBehaviour
         cloneAttackCooldown = _cloneAttackCooldown;
 
         blackholeTimer = _blackholeDuration;
+
+        // 如果水晶代替克隆，玩家透明度不发生变化
+        if (SkillManager.instance.clone.crystalInsteadOfClone)
+            playerCanDisapear = false;
     }
 
 
@@ -63,7 +67,7 @@ public class Blackhole_Skill_Controller : MonoBehaviour
             ReleaseCloneAttack();
         }
 
-        CloneAttackLogic(); //克隆攻击!!!(cloneAttackReleased = true)
+        CloneAttackLogic(); //进行克隆攻击!!!(cloneAttackReleased = true)
 
         if (canGrow && !canShrink)
         {
@@ -79,7 +83,7 @@ public class Blackhole_Skill_Controller : MonoBehaviour
         }
     }
 
-    // 克隆攻击
+    // 释放克隆攻击
     private void ReleaseCloneAttack()
     {
         if (targets.Count <= 0)
@@ -112,7 +116,15 @@ public class Blackhole_Skill_Controller : MonoBehaviour
             else
                 xOffset = -2;
 
-            SkillManager.instance.clone.CreateClone(targets[randomIndex], new Vector3(xOffset, 0)); //随机克隆攻击
+            // 判断是否触发水晶代替克隆体
+            if (SkillManager.instance.clone.crystalInsteadOfClone)
+            {
+                SkillManager.instance.crystal.CreateCrystal();
+                SkillManager.instance.crystal.CurrentCrystalChooseRandomTarget(); //随机选择一个范围内的敌人
+            }
+            else
+                SkillManager.instance.clone.CreateClone(targets[randomIndex], new Vector3(xOffset, 0)); //随机克隆攻击
+
             amountOfAttacks--; //限制攻击次数
 
             if (amountOfAttacks <= 0)

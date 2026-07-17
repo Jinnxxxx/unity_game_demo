@@ -30,6 +30,7 @@ public class Sword_Skill_Controller : MonoBehaviour
     private int targetIndex;
 
 
+    // 旋转剑信息
     [Header("Spin info")]
     private float maxTravelDistance;
     private float spinDuration;
@@ -54,7 +55,7 @@ public class Sword_Skill_Controller : MonoBehaviour
         Destroy(gameObject);
     }
 
-    // 初始化剑的状态
+    // 初始化剑的状态（初始速度和方向，重力，player，造成伤害时敌人被冻结时间，剑返回速度）
     public void SetupSword(Vector2 _dir, float _gravityScale, Player _player, float _freezeTimeDuration, float _returnSpeed)
     {
         player = _player;
@@ -69,7 +70,7 @@ public class Sword_Skill_Controller : MonoBehaviour
 
         spinDirection = Mathf.Clamp(rb.velocity.x, -1, 1);
 
-        Invoke("DestroyMe", 7);
+        Invoke("DestroyMe", 7); // 7秒后自动销毁剑
     }
 
     // 初始化弹跳剑
@@ -108,7 +109,7 @@ public class Sword_Skill_Controller : MonoBehaviour
 
     void Update()
     {
-        // 根据运动方向改变transform
+        // 根据运动方向即时改变transform
         if (canRotate)
             transform.right = rb.velocity;
 
@@ -118,17 +119,17 @@ public class Sword_Skill_Controller : MonoBehaviour
             transform.position = Vector2.MoveTowards(transform.position, player.transform.position, returnSpeed * Time.deltaTime);
             // 如果剑与玩家的距离小于1，清除剑
             if (Vector2.Distance(transform.position, player.transform.position) < 1)
-                player.CatchTheSword(); //改变state，destroy sword
+                player.CatchTheSword(); //调用player方法，改变state并destroy sword
         }
 
         // 弹跳剑逻辑
         BounceLogic();
 
-        // 穿刺剑逻辑
+        // 旋转剑逻辑
         SpinLogic();
     }
 
-    // 穿刺剑逻辑
+    // 旋转剑逻辑
     private void SpinLogic()
     {
         if (isSpinning)
@@ -146,6 +147,7 @@ public class Sword_Skill_Controller : MonoBehaviour
                 // 剑停下后，旋转同时以1.5f的速度朝前移动
                 transform.position = Vector2.MoveTowards(transform.position, new Vector2(transform.position.x + spinDirection, transform.position.y), 1.5f * Time.deltaTime);
 
+                // 如果旋转时间结束，剑返回
                 if (spinTimer < 0)
                 {
                     isReturning = true; //剑返回
@@ -205,7 +207,7 @@ public class Sword_Skill_Controller : MonoBehaviour
         }
     }
 
-    // 触碰后，停止行为
+    // 触碰后的处理逻辑
     private void OnTriggerEnter2D(Collider2D collision)
     {
         // 如果剑正在返回，不处理碰撞事件
@@ -221,6 +223,7 @@ public class Sword_Skill_Controller : MonoBehaviour
         // 触碰到敌人，初始化周围敌人list
         SetupTargetForBounce(collision);
 
+        //是否卡在敌人身上
         StuckInto(collision);
 
     }
@@ -273,12 +276,13 @@ public class Sword_Skill_Controller : MonoBehaviour
         rb.isKinematic = true;
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
 
+        // 若为弹跳剑且还能继续弹跳
         if (isBouncing && enemyTarget.Count > 0)
         {
             return;
         }
 
-        anim.SetBool("Rotation", false);
-        transform.parent = collision.transform;
+        anim.SetBool("Rotation", false); // 停止剑旋转动画
+        transform.parent = collision.transform; // 将剑挂载到敌人身上
     }
 }

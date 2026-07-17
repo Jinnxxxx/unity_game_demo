@@ -35,7 +35,9 @@ public class Crystal_Skill_Controller : MonoBehaviour
     //在范围内随机选择敌人
     public void ChooseRandomEnemy()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 25, whatIsEnemy);
+        float radius = SkillManager.instance.blackhole.GetBlackholeRadius(); //从（Blackhole_Skill）获取黑洞半径
+
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, radius, whatIsEnemy); //过滤为Enemy层的collider
 
         if (colliders.Length > 0)
             closestTarget = colliders[Random.Range(0, colliders.Length)].transform;
