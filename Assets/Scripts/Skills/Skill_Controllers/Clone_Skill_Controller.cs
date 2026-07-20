@@ -71,7 +71,7 @@ public class Clone_Skill_Controller : MonoBehaviour
         {
             if (hit.GetComponent<Enemy>() != null)
             {
-                hit.GetComponent<Enemy>().Damage();
+                hit.GetComponent<Enemy>().DamageEffect();
 
 
                 // 若允许克隆技能再产生一个克隆体，有**概率再生产一个克隆体
@@ -107,7 +107,7 @@ public class Clone_Skill_Controller : MonoBehaviour
     // 寻找最近的敌人（self_fix）
     private Transform FindClosestEnemy()
     {
-        Debug.Log(transform.position);
+        //Debug.Log(transform.position);
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 25);
 
         float closestDistance = Mathf.Infinity;

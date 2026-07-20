@@ -12,6 +12,7 @@ public class Entity : MonoBehaviour
     public EntityFX fx { get; private set; } //特效组件(EntityFX.cs)
     public SpriteRenderer sr { get; private set; } //精灵渲染器组件
     public CharacterStats stats { get; private set; } //角色状态组件(CharacterStats.cs)
+    public CapsuleCollider2D cd { get; private set; } //胶囊碰撞器组件
     #endregion
 
     [Header("Knockback info")]
@@ -47,6 +48,7 @@ public class Entity : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         fx = GetComponent<EntityFX>();
         stats = GetComponent<CharacterStats>();
+        cd = GetComponent<CapsuleCollider2D>();
     }
 
     protected virtual void Update()
@@ -55,7 +57,7 @@ public class Entity : MonoBehaviour
     }
 
     //伤害函数
-    public virtual void Damage()
+    public virtual void DamageEffect()
     {
         fx.StartCoroutine("FlashFX"); //受击闪烁
         StartCoroutine("HitKnockback"); //受击位移
@@ -78,7 +80,7 @@ public class Entity : MonoBehaviour
     //速度归0
     public void SetZeroVelocity()
     {
-        //受击时
+        //受击时确保击退位移不被覆盖
         if (isKnocked)
             return;
 
@@ -88,7 +90,7 @@ public class Entity : MonoBehaviour
     //移动函数(设置速度)
     public void SetVelocity(float _xVelocity, float _yVelocity)
     {
-        //受击时
+        //受击时确保击退位移不被覆盖
         if (isKnocked)
             return;
 
@@ -141,6 +143,11 @@ public class Entity : MonoBehaviour
             sr.color = Color.clear;
         else
             sr.color = Color.white;
+    }
+
+
+    public virtual void Die()
+    {
     }
 
 }

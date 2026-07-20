@@ -23,9 +23,10 @@ public class Enemy : Entity
     [Header("Attack info")]
     public float attackDistance;
     public float attackCooldown;
-    [HideInInspector] public float lastTimeAttacked;
+    [HideInInspector] public float lastTimeAttacked; //最后一次攻击时间
 
     public EnemyStateMachine stateMachine { get; private set; }
+    public string lastAnimBoolName { get; private set; } //最后一刻动画名
 
 
     protected override void Awake()
@@ -43,6 +44,14 @@ public class Enemy : Entity
         stateMachine.currentState.Update();
     }
 
+
+    //更新lastAnimBoolName
+    public virtual void AssignLastAnimName(string _animBoolName)
+    {
+        lastAnimBoolName = _animBoolName;
+    }
+
+
     //冻结时间技能
     public virtual void FreezeTime(bool _timeFrozen)
     {
@@ -57,7 +66,6 @@ public class Enemy : Entity
             anim.speed = 1;
         }
     }
-    
     //冻结时间技能协程
     protected virtual IEnumerator FreezeTimerFor(float _seconds)
     {
@@ -67,6 +75,7 @@ public class Enemy : Entity
 
         FreezeTime(false);
     }
+
 
     #region Counter Attack Window
     // 打开和关闭可反击窗口

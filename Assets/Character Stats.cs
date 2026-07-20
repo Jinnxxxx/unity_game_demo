@@ -14,23 +14,28 @@ public class CharacterStats : MonoBehaviour
 
 
 
-    void Start()
+    protected virtual void Start()
     {
         currentHealth = maxHealth.GetValue(); //初始化当前生命值为最大生命值
     }
 
+
+    //计算并造成伤害
     public virtual void DoDamage(CharacterStats _targetStats)
     {
 
 
         int totalDamage = damage.GetValue() + strength.GetValue(); //计算总伤害值
-        _targetStats.TakeDamage(totalDamage); //角色受到总伤害
+
+        _targetStats.TakeDamage(totalDamage); //执行目标角色受到伤害
     }
 
-
+    //执行造成伤害
     public virtual void TakeDamage(int _damage)
     {
         currentHealth -= _damage; //减少当前生命值
+
+        Debug.Log(name + " took damage : " + _damage);
 
         if (currentHealth < 0)
         {
@@ -40,7 +45,7 @@ public class CharacterStats : MonoBehaviour
 
     protected virtual void Die()
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 
 }

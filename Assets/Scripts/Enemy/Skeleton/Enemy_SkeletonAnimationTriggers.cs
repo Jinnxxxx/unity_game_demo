@@ -19,7 +19,10 @@ public class Enemy_SkeletonAnimationTriggers : MonoBehaviour
         foreach (var hit in colliders)
         {
             if (hit.GetComponent<Player>() != null)
-                hit.GetComponent<Player>().Damage();
+            {
+                PlayerStats target = hit.GetComponent<PlayerStats>();  //获取玩家状态组件(PlayerStats.cs) 
+                enemy.stats.DoDamage(target); //计算并造成伤害（包含动画）
+            }
         }
     }
 

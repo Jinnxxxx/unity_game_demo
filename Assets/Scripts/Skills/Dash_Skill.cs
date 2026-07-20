@@ -9,7 +9,7 @@ public class Dash_Skill : Skill
     {
         base.UseSkill();
 
-        Debug.Log("create clone behind");
+        Debug.Log("create clone");
     }
     
 }

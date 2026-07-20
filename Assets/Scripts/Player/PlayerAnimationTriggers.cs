@@ -22,10 +22,9 @@ public class PlayerAnimationTriggers : MonoBehaviour
         {
             if (hit.GetComponent<Enemy>() != null)
             {
-                hit.GetComponent<Enemy>().Damage(); //受击动画
-                hit.GetComponent<CharacterStats>().TakeDamage(player.stats.damage.GetValue()); //造成伤害（stats.damage）
+                EnemyStats _target = hit.GetComponent<EnemyStats>();
 
-                Debug.Log(player.stats.damage.GetValue());
+                player.stats.DoDamage(_target); //计算并造成伤害（包含动画）
             }
         }
     }
