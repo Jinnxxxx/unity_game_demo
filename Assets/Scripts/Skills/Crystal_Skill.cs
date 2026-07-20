@@ -31,6 +31,8 @@ public class Crystal_Skill : Skill
     protected override void Start()
     {
         base.Start();
+        
+        RefillCrystall(); //填充多水晶到列表(self_fix)
         originalCooldown = cooldown; //保存原始冷却时间(self_fix)
     }
 
@@ -80,7 +82,7 @@ public class Crystal_Skill : Skill
         //设置水晶的持续时间,是否可以爆炸,是否可以移动到敌人,移动速度,最近的敌人
         currentCrystalScript.SetupCrystal(crystalDuration, canExplode, canMoveToEnemy, moveSpeed, FindClosestEnemy(currentCrystal.transform));
 
-        
+
     }
 
     //选择范围内随即目标
@@ -105,7 +107,7 @@ public class Crystal_Skill : Skill
                 crystalLeft.Remove(crystalToSpawn); //从列表中移除最后一个水晶
 
                 newCrystal.GetComponent<Crystal_Skill_Controller>().
-                SetupCrystal(crystalDuration, canExplode, canMoveToEnemy, moveSpeed, FindClosestEnemy(newCrystal.transform)); //设置水晶的持续时间,是否可以爆炸,是否可以移动到敌人,移动速度,最近的敌人
+                    SetupCrystal(crystalDuration, canExplode, canMoveToEnemy, moveSpeed, FindClosestEnemy(newCrystal.transform)); //设置水晶的持续时间,是否可以爆炸,是否可以移动到敌人,移动速度,最近的敌人
 
                 if (crystalLeft.Count <= 0)
                 {

@@ -273,8 +273,8 @@ public class Sword_Skill_Controller : MonoBehaviour
         canRotate = false;
         cd.enabled = false;
 
-        rb.isKinematic = true;
-        rb.constraints = RigidbodyConstraints2D.FreezeAll;
+        rb.isKinematic = true; //切为运动学
+        rb.constraints = RigidbodyConstraints2D.FreezeAll; //冻结xy轴
 
         // 若为弹跳剑且还能继续弹跳
         if (isBouncing && enemyTarget.Count > 0)

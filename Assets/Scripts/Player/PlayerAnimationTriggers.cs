@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class PlayerAnimationTriggers : MonoBehaviour
 {
+
     private Player player => GetComponentInParent<Player>();
 
+
+    // 更改变量triggercalled = true
     private void AnimationTrigger()
     {
         player.AnimationTrigger();
@@ -18,7 +21,12 @@ public class PlayerAnimationTriggers : MonoBehaviour
         foreach (var hit in colliders)
         {
             if (hit.GetComponent<Enemy>() != null)
-                hit.GetComponent<Enemy>().Damage();
+            {
+                hit.GetComponent<Enemy>().Damage(); //受击动画
+                hit.GetComponent<CharacterStats>().TakeDamage(player.stats.damage.GetValue()); //造成伤害（stats.damage）
+
+                Debug.Log(player.stats.damage.GetValue());
+            }
         }
     }
 
