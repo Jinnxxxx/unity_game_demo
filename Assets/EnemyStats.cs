@@ -26,5 +26,6 @@ public class EnemyStats : CharacterStats
         base.Die();
 
         enemy.Die();
+        
     }
 }

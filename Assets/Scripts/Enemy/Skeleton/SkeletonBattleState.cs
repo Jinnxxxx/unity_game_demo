@@ -16,7 +16,7 @@ public class SkeletonBattleState : EnemyState
     public override void Enter()
     {
         base.Enter();
-        
+
         player = PlayerManager.instance.player.transform;
     }
 
@@ -26,7 +26,7 @@ public class SkeletonBattleState : EnemyState
 
         if (enemy.isPlayerDetected())
         {
-            stateTimer = enemy.battleTime; 
+            stateTimer = enemy.battleTime;
 
             if (enemy.isPlayerDetected().distance < enemy.attackDistance)
             {
@@ -43,13 +43,17 @@ public class SkeletonBattleState : EnemyState
                 stateMachine.ChangeState(enemy.idleState);
         }
 
-
+        // move towards player
         if (player.position.x > enemy.transform.position.x)
             moveDir = 1;
         else if (player.position.x < enemy.transform.position.x)
             moveDir = -1;
 
-        enemy.SetVelocity(enemy.moveSpeed * moveDir, rb.velocity.y); //向player移动
+        // avoid flipping when player is too close
+        if (Mathf.Abs(player.position.x - enemy.transform.position.x) < enemy.attackDistance)
+            moveDir = 0;
+
+        enemy.SetVelocity(enemy.moveSpeed * moveDir, rb.velocity.y);
     }
 
     public override void Exit()

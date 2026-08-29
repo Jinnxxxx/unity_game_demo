@@ -16,9 +16,9 @@ public class PlayerStats : CharacterStats
 
     public override void TakeDamage(int _damage)
     {
-        base.TakeDamage(_damage);
+        base.TakeDamage(_damage); // 减少血量（包括血条UI）
 
-        player.DamageEffect();
+        player.DamageEffect(); // 受击动画
     }
 
 
@@ -26,6 +26,6 @@ public class PlayerStats : CharacterStats
     {
         base.Die();
 
-        player.Die();
+        player.Die(); // 切换状态机
     }
 }

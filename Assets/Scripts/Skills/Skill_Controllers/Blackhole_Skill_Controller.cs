@@ -112,9 +112,9 @@ public class Blackhole_Skill_Controller : MonoBehaviour
             // 偏移量设置
             float xOffset;
             if (UnityEngine.Random.Range(0, 50) > 50)
-                xOffset = 2;
+                xOffset = 1.5f;
             else
-                xOffset = -2;
+                xOffset = -1.5f;
 
             // 判断是否触发水晶代替克隆体
             if (SkillManager.instance.clone.crystalInsteadOfClone)

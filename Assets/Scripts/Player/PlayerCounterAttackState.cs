@@ -34,15 +34,15 @@ public class PlayerCounterAttackState : PlayerState
         {
             if (hit.GetComponent<Enemy>() != null)
             {
-                if (hit.GetComponent<Enemy>().CanBeStunned()) //反击成功
+                if (hit.GetComponent<Enemy>().CanBeStunned()) // 反击成功
                 {
                     stateTimer = 10; //防止过早退出
-                    player.anim.SetBool("SuccessfulCounterAttack", true); //进入反击成功动画
+                    player.anim.SetBool("SuccessfulCounterAttack", true); // 进入反击成功动画
 
                     if (canCreateClone)
                     {
                         canCreateClone = false; //克隆创建数量限制
-                        player.skill.clone.CreateCloneOnCounterAttack(hit.transform); //反击成功后创建克隆}
+                        player.skill.clone.CreateCloneOnCounterAttack(hit.transform); // 反击成功后创建克隆
                     }
                 }
             }

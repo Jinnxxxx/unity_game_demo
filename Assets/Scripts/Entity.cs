@@ -36,6 +36,8 @@ public class Entity : MonoBehaviour
     public int facingDir { get; private set; } = 1; // 1: 右  -1: 左
     protected bool facingRight = true;
 
+    public System.Action onFlipped;
+
     protected virtual void Awake()
     {
 
@@ -54,6 +56,19 @@ public class Entity : MonoBehaviour
     protected virtual void Update()
     {
 
+    }
+
+    // 不同角色不同减速效果
+    public virtual void SlowEntityBy(float _slowPercentage, float _slowDuration)
+    {
+        // slow the speed needed
+        // invoke ReturnDefaultSpeed() after _slowDuration
+    }
+
+    // 恢复速度
+    protected virtual void ReturnDefaultSpeed()
+    {
+        anim.speed = 1;
     }
 
     //伤害函数
@@ -121,6 +136,11 @@ public class Entity : MonoBehaviour
         facingDir *= -1;
         facingRight = !facingRight;
         transform.Rotate(0, 180, 0);
+
+        onFlipped?.Invoke(); //翻转事件
+        // if (onFlipped != null)
+        //     onFlipped();
+
     }
 
     public virtual void FlipController(float _x)
