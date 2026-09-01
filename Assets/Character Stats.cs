@@ -45,6 +45,8 @@ public class CharacterStats : MonoBehaviour
     private float igniteDamageCooldown = .3f; // 点燃造成时间间隔（默认0.3）
     private float igniteDamageTimer; // 点燃造成伤害时间timer
     private int igniteDamage; // 点燃造成伤害值
+    [SerializeField] private GameObject shockStrikePrefab; // 电击伤害特效预制件
+    private int shockDamage; // 电击伤害值
 
 
 
@@ -80,6 +82,7 @@ public class CharacterStats : MonoBehaviour
             isShocked = false;
 
 
+        // 满足条件触发ignite效果
         if (igniteDamageTimer < 0 && isIgnited)
         {
             Debug.Log("take burn damage : " + igniteDamage);
@@ -151,7 +154,7 @@ public class CharacterStats : MonoBehaviour
         bool canApplyChill = _iceDamage > _fireDamage && _iceDamage > _lightingDamage;
         bool canApplyShock = _lightingDamage > _fireDamage && _lightingDamage > _iceDamage;
 
-        // 如果多个效果伤害相同，则随机选择
+        // 如果多个效果伤害相同，则随机选择一种触发并return
         while (!canApplyIgnite && !canApplyChill && !canApplyShock)
         {
             if (Random.value < .3f && _fireDamage > 0)
@@ -181,6 +184,10 @@ public class CharacterStats : MonoBehaviour
         if (canApplyIgnite)
             _targetStats.SetupIgniteDamage(Mathf.RoundToInt(_fireDamage * .2f));
 
+        // 设置shock伤害(10%的电击伤害值)
+        if (canApplyShock)
+            _targetStats.SetupShockStrikeDamage(Mathf.RoundToInt(_lightingDamage * .1f));
+
         // 执行目标角色受到的负面效果(哪个效果伤害更高就执行哪个)
         _targetStats.ApplyAilments(canApplyIgnite, canApplyChill, canApplyShock);
     }
@@ -197,40 +204,91 @@ public class CharacterStats : MonoBehaviour
     // 执行元素效果
     public void ApplyAilments(bool _ignite, bool _chill, bool _shock)
     {
-        if (isIgnited || isChilled || isShocked)
-            return;
+        // 三种元素不能叠加
+        //if (isIgnited || isChilled || isShocked)
+        //  return;
 
-        if (_ignite)
+        bool canApplyIgnite = !isIgnited && !isChilled && !isShocked;
+        bool canApplyChill = !isIgnited && !isChilled && !isShocked;
+        bool canApplyShock = !isIgnited && !isChilled;
+
+        if (_ignite && canApplyIgnite)
         {
-            isIgnited = true;
-            ignitedTimer = ailmentsDuration; // 点燃持续时间
+            ignitedTimer = ailmentsDuration; // 效果持续时间
+            isIgnited = true; // 设置为true触发对应效果
 
-            fx.IgniteFxFor(ailmentsDuration); // 触发点燃特效
+            fx.IgniteFxFor(ailmentsDuration); // 触发特效
         }
 
-        if (_chill)
+        if (_chill && canApplyChill)
         {
-            isChilled = true;
             chilledTimer = ailmentsDuration;
+            isChilled = true;
 
             float slowPercentage = .2f;
-            
+
             GetComponent<Entity>().SlowEntityBy(slowPercentage, ailmentsDuration); // 减速20%
             fx.ChillFxFor(ailmentsDuration);
         }
 
-        if (_shock)
+        if (_shock && canApplyShock)
         {
-            isShocked = true;
-            shockedTimer = ailmentsDuration;
+            // if !isShocked, increase target's missing rate; if isShocked, 
+            if (!isShocked)
+            {
+                shockedTimer = ailmentsDuration;
+                isShocked = true;
 
-            fx.ShockFxFor(ailmentsDuration);
+                fx.ShockFxFor(ailmentsDuration);
+            }
+            else
+            {
+                Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 25); // 检查半径为25的范围内object                                                                            
+                float closestDistance = Mathf.Infinity;
+                Transform closestEnemy = null;
+                foreach (var hit in colliders)
+                {
+                    // self_fix(shock特效不伤害自身)
+                    if (hit.transform == transform)
+                        continue;
+                    // if (hit.GetComponent<Enemy>() != null && Vector2.Distance(transform.position, hit.transform.position) > 1)
+                    if (hit.GetComponent<Enemy>() != null)
+                    {
+                        float distanceToEnemy = Vector2.Distance(transform.position, hit.transform.position);
+
+                        if (distanceToEnemy < closestDistance)
+                        {
+                            closestDistance = distanceToEnemy;
+                            closestEnemy = hit.transform;
+                        }
+                    }
+                }
+
+                if (closestEnemy == null)
+                    closestEnemy = transform; // 如果没有找到敌人，就设置为自身
+
+                if (closestEnemy != null)
+                {
+                    GameObject newShockStrike = Instantiate(shockStrikePrefab, transform.position, Quaternion.identity);
+                    newShockStrike.GetComponent<ShockStrike_Controller>().Setup(shockDamage, closestEnemy.GetComponent<CharacterStats>());
+                }
+
+
+                // find closest target, only enemies
+                // instantiate thunder strike
+                // setup thunder strike
+            }
+
         }
+
     }
 
 
     // 设置点燃造成伤害值
     public void SetupIgniteDamage(int _damage) => igniteDamage = _damage;
+    // 设置电击造成伤害值
+    public void SetupShockStrikeDamage(int _damage) => shockDamage = _damage;
+
 
     // 执行造成伤害
     public virtual void TakeDamage(int _damage)
