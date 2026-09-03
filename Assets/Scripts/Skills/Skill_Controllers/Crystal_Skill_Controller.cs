@@ -7,6 +7,7 @@ public class Crystal_Skill_Controller : MonoBehaviour
 {
     private Animator anim => GetComponent<Animator>(); // 获取动画组件
     private CircleCollider2D cd => GetComponent<CircleCollider2D>(); // 获取圆形碰撞器组件
+    private Player player;
 
     private float crystalExitTimer; // 水晶存在时间
 
@@ -22,25 +23,26 @@ public class Crystal_Skill_Controller : MonoBehaviour
     [SerializeField] private LayerMask whatIsEnemy; // 敌人层掩码
 
     // 水晶参数初始化
-    public void SetupCrystal(float _crystalDuration, bool _canExplode, bool _canMove, float _moveSpeed, Transform _closestTarget)
+    public void SetupCrystal(float _crystalDuration, bool _canExplode, bool _canMove, float _moveSpeed, Transform _closestTarget, Player _player)
     {
         crystalExitTimer = _crystalDuration;
         canExplode = _canExplode;
         canMove = _canMove;
         moveSpeed = _moveSpeed;
         closestTarget = _closestTarget;
+        player = _player;
     }
 
 
-    //在范围内随机选择敌人
+    // 在范围内随机选择敌人
     public void ChooseRandomEnemy()
     {
-        float radius = SkillManager.instance.blackhole.GetBlackholeRadius(); //从（Blackhole_Skill）获取黑洞半径
+        float radius = SkillManager.instance.blackhole.GetBlackholeRadius(); // 从（Blackhole_Skill）获取黑洞半径
 
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, radius, whatIsEnemy); //过滤为Enemy层的collider
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, radius, whatIsEnemy); // 过滤为Enemy层的collider
 
         if (colliders.Length > 0)
-            closestTarget = colliders[Random.Range(0, colliders.Length)].transform;
+            closestTarget = colliders[Random.Range(0, colliders.Length)].transform; // 随机选择一个敌人
     }
 
 
@@ -51,24 +53,24 @@ public class Crystal_Skill_Controller : MonoBehaviour
         if (crystalExitTimer < 0)
             FinishCrystal(); //持续时间结束，触发爆炸或自毁
 
-        //水晶移动
+        // 水晶移动
         if (canMove)
         {
             transform.position = Vector2.MoveTowards(transform.position, closestTarget.position, moveSpeed * Time.deltaTime); // 逐帧移动到目标位置
 
             if (Vector2.Distance(transform.position, closestTarget.position) < 1)
             {
-                FinishCrystal();
+                FinishCrystal(); // 爆炸或自毁
                 canMove = false; // 移动到目标后，停止移动
             }
 
-            //水晶线性变大
+            // 水晶线性变大
             if (canGrow)
                 transform.localScale = Vector2.Lerp(transform.localScale, new Vector2(3, 3), growSpeed * Time.deltaTime);
         }
     }
 
-    //水晶爆炸造成伤害（anim的event调用）
+    // 水晶爆炸造成伤害（anim的event调用）
     private void AnimationExplodeEvent()
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, cd.radius);
@@ -76,11 +78,12 @@ public class Crystal_Skill_Controller : MonoBehaviour
         foreach (var hit in colliders)
         {
             if (hit.GetComponent<Enemy>() != null)
-                hit.GetComponent<Enemy>().DamageEffect();
+                // hit.GetComponent<Enemy>().DamageEffect(); // 受击特效
+                player.stats.DoMagicalDamage(hit.GetComponent<CharacterStats>()); // 造成伤害
         }
     }
 
-
+    // 水晶爆炸或消失
     public void FinishCrystal()
     {
         if (canExplode)
@@ -92,7 +95,7 @@ public class Crystal_Skill_Controller : MonoBehaviour
             SelfDestroy();
     }
 
-    // 自毁水晶object
+    // 水晶object自毁（FinishCrystal和anim中event调用）
     public void SelfDestroy() => Destroy(gameObject);
 
 }

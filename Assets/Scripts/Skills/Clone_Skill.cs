@@ -24,10 +24,11 @@ public class Clone_Skill : Skill
     public void CreateClone(Transform _clonePosition, Vector3 _offset)
     { 
 
+        // 水晶代替克隆                                                     
         if (crystalInsteadOfClone)
         {
             SkillManager.instance.crystal.CreateCrystal();
-            return; // 如果使用水晶代替克隆，直接返回
+            return; // 直接返回
         }
 
 

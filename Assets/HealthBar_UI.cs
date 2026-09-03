@@ -19,8 +19,8 @@ public class HealthBar_UI : MonoBehaviour
         myStats = GetComponentInParent<CharacterStats>();
 
 
-        entity.onFlipped += FlipUI; //订阅翻转时事件
-        myStats.onHealthChanged += UpdateHealthUI; //订阅生命发生改变时事件
+        entity.onFlipped += FlipUI; // 订阅翻转时事件
+        myStats.onHealthChanged += UpdateHealthUI; // 订阅生命发生改变时事件
 
         UpdateHealthUI(); // 初始化血条UI
     }

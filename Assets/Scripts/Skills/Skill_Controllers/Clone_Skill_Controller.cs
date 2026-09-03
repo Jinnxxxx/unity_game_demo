@@ -43,7 +43,7 @@ public class Clone_Skill_Controller : MonoBehaviour
     // 初始化克隆体（克隆体的初始位置，克隆体的持续时间，克隆体是否可以攻击，克隆体的偏移量，最近敌人，是否允许duplicate，duplicate概率）
     public void SetupClone(Transform _newTransform, float _cloneDuration, bool _canAttack, Vector3 _offset, Transform _closestEnemy, bool _canDuplicate, float _chanceToDuplicate, Player _player)
     {
-        // 是否可以攻击
+        // 是否可以攻击，若可以，设置随机攻击编号，便会从animator中随机播放攻击动画，并触发攻击效果
         if (_canAttack)
             anim.SetInteger("AttackNumber", Random.Range(1, 4));
 
@@ -59,6 +59,7 @@ public class Clone_Skill_Controller : MonoBehaviour
     }
 
 
+    // 克隆体攻击结束后，将克隆体持续时间设置为负数（anim添加event调用）
     private void AnimationTrigger()
     {
         cloneTimer = -.1f;
@@ -74,10 +75,10 @@ public class Clone_Skill_Controller : MonoBehaviour
         {
             if (hit.GetComponent<Enemy>() != null)
             {
-                hit.GetComponent<Enemy>().DamageEffect();
+                // hit.GetComponent<Enemy>().DamageEffect(); // 受击特效
 
-
-
+                // 调用characterstats的DaDamage函数造成伤害
+                player.stats.DoDamage(hit.GetComponent<CharacterStats>());
 
                 // 若允许克隆技能再产生一个克隆体，有**概率再生产一个克隆体
                 if (canDuplicateClone)
@@ -89,11 +90,10 @@ public class Clone_Skill_Controller : MonoBehaviour
                 }
             }
         }
-
     }
 
 
-    // 克隆体攻击时方向
+    // 克隆体攻击时方向（比较x轴坐标）
     private void FaceClosestTarget()
     {
         // sprite默认朝左，如果最近敌人（closestEnemy）在左侧，sprite旋转180度

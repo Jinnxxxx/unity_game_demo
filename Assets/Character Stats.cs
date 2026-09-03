@@ -101,7 +101,7 @@ public class CharacterStats : MonoBehaviour
     }
 
 
-    // 计算并造成伤害(是否闪避-初始化伤害-是否暴击-计算护甲-执行物理伤害)（执行魔法伤害）
+    // 计算并造成 物理(+魔法) 伤害
     public virtual void DoDamage(CharacterStats _targetStats)
     {
         // 判断是否闪避攻击
@@ -120,19 +120,17 @@ public class CharacterStats : MonoBehaviour
         // 检查并计算护甲
         totalDamage = CheckTargetArmor(_targetStats, totalDamage);
 
-
-
         // 执行目标角色受到物理伤害
-        //_targetStats.TakeDamage(totalDamage);
-
-
+        _targetStats.TakeDamage(totalDamage);
 
         // 执行目标角色受到魔法伤害
-        DoMagicalDamage(_targetStats);
+        // DoMagicalDamage(_targetStats);
+
+        // if inventory current weapon has fire effect, then DoMagicalDamage(_targetStats);
     }
 
 
-    // 计算和执行魔法伤害
+    // 计算和执行魔法伤害，判定元素效果
     public virtual void DoMagicalDamage(CharacterStats _targetStats)
     {
         int _fireDamage = fireDamage.GetValue();
@@ -143,18 +141,16 @@ public class CharacterStats : MonoBehaviour
         totalMagicalDamage = CheckTargetResistance(_targetStats, totalMagicalDamage); // 减去魔抗
         _targetStats.TakeDamage(totalMagicalDamage); // 执行目标角色受到魔法伤害
 
-
         // 不造成元素伤害直接return（避免后面while无限循环）
         if (Mathf.Max(_fireDamage, _iceDamage, _lightingDamage) <= 0)
             return;
 
-
-        // 判断为那种元素效果
+        // 有单独一个max时，直接判断为那种元素效果
         bool canApplyIgnite = _fireDamage > _iceDamage && _fireDamage > _lightingDamage;
         bool canApplyChill = _iceDamage > _fireDamage && _iceDamage > _lightingDamage;
         bool canApplyShock = _lightingDamage > _fireDamage && _lightingDamage > _iceDamage;
 
-        // 如果多个效果伤害相同，则随机选择一种触发并return
+        // 如果2个或以上效果伤害相同，则随机选择一种触发并return
         while (!canApplyIgnite && !canApplyChill && !canApplyShock)
         {
             if (Random.value < .3f && _fireDamage > 0)

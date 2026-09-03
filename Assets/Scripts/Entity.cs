@@ -71,7 +71,7 @@ public class Entity : MonoBehaviour
         anim.speed = 1;
     }
 
-    // 伤害函数
+    // 受击特效
     public virtual void DamageEffect()
     {
         fx.StartCoroutine("FlashFX"); // 受击闪烁

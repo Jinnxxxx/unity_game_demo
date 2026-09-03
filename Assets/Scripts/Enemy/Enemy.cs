@@ -65,7 +65,7 @@ public class Enemy : Entity
     }
 
 
-    //冻结时间技能
+    // 冻结时间的效果
     public virtual void FreezeTime(bool _timeFrozen)
     {
         if (_timeFrozen)
@@ -80,7 +80,7 @@ public class Enemy : Entity
         }
     }
 
-    //冻结时间技能协程
+    // 冻结时间技能协程
     protected virtual IEnumerator FreezeTimerFor(float _seconds)
     {
         FreezeTime(true);

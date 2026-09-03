@@ -1044,7 +1044,7 @@ MonoBehaviour:
   crystalPrefab: {fileID: 6159105644170575757, guid: b7b7eabca12e0a941910363e4522f133, type: 3}
   cloneInsteadOfCrystal: 0
   canExplode: 1
-  canMoveToEnemy: 0
+  canMoveToEnemy: 1
   moveSpeed: 4
   canUseMultiStacks: 0
   amountOfStacks: 3
@@ -8637,13 +8637,13 @@ MonoBehaviour:
     baseValue: 1
     modifiers: 
   fireDamage:
-    baseValue: 1
+    baseValue: 0
     modifiers: 
   iceDamage:
-    baseValue: 2
+    baseValue: 0
     modifiers: 
   lightingDamage:
-    baseValue: 3
+    baseValue: 5
     modifiers: 
   isIgnited: 0
   isChilled: 0

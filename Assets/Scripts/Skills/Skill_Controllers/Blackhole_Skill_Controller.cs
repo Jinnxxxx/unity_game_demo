@@ -120,10 +120,10 @@ public class Blackhole_Skill_Controller : MonoBehaviour
             if (SkillManager.instance.clone.crystalInsteadOfClone)
             {
                 SkillManager.instance.crystal.CreateCrystal();
-                SkillManager.instance.crystal.CurrentCrystalChooseRandomTarget(); //随机选择一个范围内的敌人
+                SkillManager.instance.crystal.CurrentCrystalChooseRandomTarget(); // 随机选择一个范围内的敌人
             }
             else
-                SkillManager.instance.clone.CreateClone(targets[randomIndex], new Vector3(xOffset, 0)); //随机克隆攻击
+                SkillManager.instance.clone.CreateClone(targets[randomIndex], new Vector3(xOffset, 0)); // 随机克隆攻击
 
             amountOfAttacks--; //限制攻击次数
 

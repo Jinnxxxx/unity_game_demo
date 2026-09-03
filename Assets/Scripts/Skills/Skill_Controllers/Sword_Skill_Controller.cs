@@ -5,41 +5,41 @@ using UnityEngine;
 
 public class Sword_Skill_Controller : MonoBehaviour
 {
-    private Animator anim;
-    private Rigidbody2D rb;
-    private CircleCollider2D cd;
-    private Player player;
+    private Animator anim; // 动画组件
+    private Rigidbody2D rb; // 2d刚体组件
+    private CircleCollider2D cd; // 2d圆形碰撞器组件
+    private Player player; // player组件
 
-    private bool canRotate = true;
-    private bool isReturning;
+    private bool canRotate = true; // 是否可实时调整方向
+    private bool isReturning; // 是否正在返回
 
-    private float freezeTimeDuration;
-    private float returnSpeed = 12;
+    private float freezeTimeDuration; // 剑命中后敌人被冻结的时间
+    private float returnSpeed = 12; // 剑返回player的速度
 
     // 穿刺剑信息
     [Header("Pierce info")]
-    private float pierceAmount;
+    private float pierceAmount; // 剩余可穿透敌人次数
 
 
     // 弹跳剑信息
     [Header("Bounce info")]
-    private float bounceSpeed;
-    private bool isBouncing;
-    private int bounceAmount;
-    private List<Transform> enemyTarget;
-    private int targetIndex;
+    private float bounceSpeed; // 在目标之间移动速度
+    private bool isBouncing; // 是否启用弹跳
+    private int bounceAmount; // 剩余可弹跳次数
+    private List<Transform> enemyTarget; // 弹跳范围内可供追踪敌人列表
+    private int targetIndex; // 当前追踪敌人索引
 
 
     // 旋转剑信息
     [Header("Spin info")]
-    private float maxTravelDistance;
-    private float spinDuration;
-    private float spinTimer;
-    private bool wasStopped;
-    private bool isSpinning;
+    private float maxTravelDistance; // 剑最大移动距离
+    private float spinDuration; // 剑停止飞行后，持续旋转攻击的时间
+    private float spinTimer; // 剩余旋转攻击的时间
+    private bool wasStopped; // 是否停止飞行
+    private bool isSpinning; // 是否处于旋转剑逻辑状态
 
-    private float hitTimer;
-    private float hitCooldown;
+    private float hitTimer; // 下一次伤害触发剩余时间
+    private float hitCooldown; // 两次伤害检测之间间隔
 
     private float spinDirection;
 
@@ -150,8 +150,8 @@ public class Sword_Skill_Controller : MonoBehaviour
                 // 如果旋转时间结束，剑返回
                 if (spinTimer < 0)
                 {
-                    isReturning = true; //剑返回
-                    isSpinning = false;
+                    isReturning = true; // 触发剑返回
+                    isSpinning = false; // 停止进入旋转剑logic
                 }
 
                 // 伤害触发
@@ -160,11 +160,11 @@ public class Sword_Skill_Controller : MonoBehaviour
                 {
                     hitTimer = hitCooldown;
 
-                    Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1);
+                    Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1); // 获得范围1以内的colliders
                     foreach (var hit in colliders)
                     {
                         if (hit.GetComponent<Enemy>() != null)
-                            SwordSkillDamage(hit.GetComponent<Enemy>());//造成伤害
+                            SwordSkillDamage(hit.GetComponent<Enemy>()); // 对带有Enemy组件的对象造成伤害
                     }
                 }
 
@@ -175,7 +175,7 @@ public class Sword_Skill_Controller : MonoBehaviour
     private void StopWhenSpinning()
     {
         wasStopped = true;
-        rb.constraints = RigidbodyConstraints2D.FreezeAll;
+        rb.constraints = RigidbodyConstraints2D.FreezeAll; // 冻结xy轴
         spinTimer = spinDuration;
     }
 
@@ -228,12 +228,15 @@ public class Sword_Skill_Controller : MonoBehaviour
 
     }
 
+    // 剑技能造成伤害函数（统一使用）
     private void SwordSkillDamage(Enemy enemy)
     {
-        enemy.DamageEffect();
-        enemy.StartCoroutine("FreezeTimerFor", freezeTimeDuration);
+        //enemy.DamageEffect();
+        player.stats.DoDamage(enemy.GetComponent<CharacterStats>()); // 造成伤害
+        enemy.StartCoroutine("FreezeTimerFor", freezeTimeDuration); // 冻结敌人
     }
 
+    // 初始化周围敌人列表(enemyTarget)，供弹跳剑使用
     private void SetupTargetForBounce(Collider2D collision)
     {
         if (collision.GetComponent<Enemy>() != null)

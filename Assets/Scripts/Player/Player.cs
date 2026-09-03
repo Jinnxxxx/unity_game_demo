@@ -98,7 +98,7 @@ public class Player : Entity
 
         stateMachine.currentState.Update();
 
-        //按下shift进行冲刺
+        // 按下shift进行冲刺
         CheckForDashInput();
 
         // 按下F使用水晶技能
