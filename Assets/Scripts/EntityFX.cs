@@ -45,11 +45,11 @@ public class EntityFX : MonoBehaviour
             sr.color = Color.red;
     }
 
-    // (弹反成功结束后)恢复颜色
+    // 恢复颜色
     private void CancelColorChange()
     {
-        CancelInvoke();
-        sr.color = Color.white;
+        CancelInvoke(); // 取消所有Invoke调用
+        sr.color = Color.white; // 恢复原颜色
     }
 
     // 触发点燃特效

@@ -236,51 +236,68 @@ public class CharacterStats : MonoBehaviour
             // if !isShocked, increase target's missing rate; if isShocked, 
             if (!isShocked)
             {
-                shockedTimer = ailmentsDuration;
-                isShocked = true;
-
-                fx.ShockFxFor(ailmentsDuration);
+                ApplyShock(_shock);
             }
             else
             {
-                Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 25); // 检查半径为25的范围内object                                                                            
-                float closestDistance = Mathf.Infinity;
-                Transform closestEnemy = null;
-                foreach (var hit in colliders)
-                {
-                    // self_fix(shock特效不伤害自身)
-                    if (hit.transform == transform)
-                        continue;
-                    // if (hit.GetComponent<Enemy>() != null && Vector2.Distance(transform.position, hit.transform.position) > 1)
-                    if (hit.GetComponent<Enemy>() != null)
-                    {
-                        float distanceToEnemy = Vector2.Distance(transform.position, hit.transform.position);
+                // 若为player直接返回
+                if (GetComponent<Player>() != null)
+                    return;
 
-                        if (distanceToEnemy < closestDistance)
-                        {
-                            closestDistance = distanceToEnemy;
-                            closestEnemy = hit.transform;
-                        }
-                    }
-                }
-
-                if (closestEnemy == null)
-                    closestEnemy = transform; // 如果没有找到敌人，就设置为自身
-
-                if (closestEnemy != null)
-                {
-                    GameObject newShockStrike = Instantiate(shockStrikePrefab, transform.position, Quaternion.identity);
-                    newShockStrike.GetComponent<ShockStrike_Controller>().Setup(shockDamage, closestEnemy.GetComponent<CharacterStats>());
-                }
-
-
-                // find closest target, only enemies
-                // instantiate thunder strike
-                // setup thunder strike
+                // 生成shockstrike，朝最近的敌人发射
+                HitClosetTargetWithShockStrike();
             }
 
         }
 
+    }
+
+    public void ApplyShock(bool _shock)
+    {
+        // 若已经被电击，则不再触发电击效果（重置时间，触发特效）
+        if (isShocked)
+            return;
+
+        shockedTimer = ailmentsDuration; // 持续时间
+        isShocked = _shock; // 设置为true触发对应效果
+
+        fx.ShockFxFor(ailmentsDuration); // 触发特效
+    }
+
+    private void HitClosetTargetWithShockStrike()
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 25); // 检查半径为25的范围内object                                                                            
+        float closestDistance = Mathf.Infinity;
+        Transform closestEnemy = null;
+        foreach (var hit in colliders)
+        {
+            // self_fix(shock特效不伤害自身)
+            if (hit.transform == transform)
+                continue;
+            // if (hit.GetComponent<Enemy>() != null && Vector2.Distance(transform.position, hit.transform.position) > 1)
+            if (hit.GetComponent<Enemy>() != null)
+            {
+                float distanceToEnemy = Vector2.Distance(transform.position, hit.transform.position);
+                if (distanceToEnemy < closestDistance)
+                {
+                    closestDistance = distanceToEnemy;
+                    closestEnemy = hit.transform;
+                }
+            }
+        }
+
+        if (closestEnemy == null)
+            closestEnemy = transform; // 如果没有找到敌人，就设置为自身
+
+        if (closestEnemy != null)
+        {
+            GameObject newShockStrike = Instantiate(shockStrikePrefab, transform.position, Quaternion.identity);
+            newShockStrike.GetComponent<ShockStrike_Controller>().Setup(shockDamage, closestEnemy.GetComponent<CharacterStats>());
+        }
+
+        // find closest target, only enemies
+        // instantiate thunder strike
+        // setup thunder strike
     }
 
 

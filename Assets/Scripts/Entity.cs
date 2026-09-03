@@ -5,14 +5,14 @@ using UnityEngine;
 public class Entity : MonoBehaviour
 {
 
-    //组件
+    // 组件
     #region Components
-    public Animator anim { get; private set; } //动画组件
-    public Rigidbody2D rb { get; private set; } //刚体组件
-    public EntityFX fx { get; private set; } //特效组件(EntityFX.cs)
-    public SpriteRenderer sr { get; private set; } //精灵渲染器组件
-    public CharacterStats stats { get; private set; } //角色状态组件(CharacterStats.cs)
-    public CapsuleCollider2D cd { get; private set; } //胶囊碰撞器组件
+    public Animator anim { get; private set; } // 动画组件
+    public Rigidbody2D rb { get; private set; } // 刚体组件
+    public EntityFX fx { get; private set; } // 特效组件(EntityFX.cs)
+    public SpriteRenderer sr { get; private set; } // 精灵渲染器组件
+    public CharacterStats stats { get; private set; } // 角色状态组件(CharacterStats.cs)
+    public CapsuleCollider2D cd { get; private set; } // 胶囊碰撞器组件
     #endregion
 
     [Header("Knockback info")]
@@ -23,16 +23,16 @@ public class Entity : MonoBehaviour
     [Header("Collision info")]
     public Transform attackCheck;
     public float attackCheckRadius;
-    //地面检测
+    // 地面检测
     [SerializeField] protected Transform groundCheck;
     [SerializeField] protected float groundCheckDistance;
-    //墙体检测
+    // 墙体检测
     [SerializeField] protected Transform wallCheck;
     [SerializeField] protected float wallCheckDistance;
     //地面层
     [SerializeField] protected LayerMask whatIsGround;
 
-    //角色方向
+    // 角色方向
     public int facingDir { get; private set; } = 1; // 1: 右  -1: 左
     protected bool facingRight = true;
 
@@ -65,22 +65,22 @@ public class Entity : MonoBehaviour
         // invoke ReturnDefaultSpeed() after _slowDuration
     }
 
-    // 恢复速度
+    // 恢复animation速度
     protected virtual void ReturnDefaultSpeed()
     {
         anim.speed = 1;
     }
 
-    //伤害函数
+    // 伤害函数
     public virtual void DamageEffect()
     {
-        fx.StartCoroutine("FlashFX"); //受击闪烁
-        StartCoroutine("HitKnockback"); //受击位移
+        fx.StartCoroutine("FlashFX"); // 受击闪烁
+        StartCoroutine("HitKnockback"); // 受击位移
 
         // Debug.Log(gameObject.name + "   was damaged");
     }
 
-    //受击位移
+    // 受击位移
     protected virtual IEnumerator HitKnockback()
     {
         isKnocked = true;
@@ -92,20 +92,20 @@ public class Entity : MonoBehaviour
     }
 
     #region Velocity
-    //速度归0
+    // 速度归0
     public void SetZeroVelocity()
     {
-        //受击时确保击退位移不被覆盖
+        // 受击时确保击退位移不被覆盖
         if (isKnocked)
             return;
 
         rb.velocity = Vector2.zero;
     }
 
-    //移动函数(设置速度)
+    // 移动函数(设置速度)
     public void SetVelocity(float _xVelocity, float _yVelocity)
     {
-        //受击时确保击退位移不被覆盖
+        // 受击时确保击退位移不被覆盖
         if (isKnocked)
             return;
 
@@ -137,7 +137,7 @@ public class Entity : MonoBehaviour
         facingRight = !facingRight;
         transform.Rotate(0, 180, 0);
 
-        onFlipped?.Invoke(); //翻转事件
+        onFlipped?.Invoke(); // 翻转事件
         // if (onFlipped != null)
         //     onFlipped();
 
@@ -156,7 +156,7 @@ public class Entity : MonoBehaviour
     }
     #endregion
 
-    //精灵透明度控制
+    // 精灵透明度控制
     public void MakeTransparent(bool _transparent)
     {
         if (_transparent)

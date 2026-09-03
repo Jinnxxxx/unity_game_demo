@@ -58,6 +58,7 @@ public class ShockStrike_Controller : MonoBehaviour
     // 造成伤害，销毁对象
     private void DamageAndSelfDestroy()
     {
+        targetStats.ApplyShock(true);
         targetStats.TakeDamage(damage);
         Destroy(gameObject, .4f);
     }

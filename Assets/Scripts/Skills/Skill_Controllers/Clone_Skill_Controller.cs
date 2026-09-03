@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Clone_Skill_Controller : MonoBehaviour
 {
+    private Player player;
     private SpriteRenderer sr;
     private Animator anim;
     [SerializeField] private float colorLoosingSpeed;
@@ -39,12 +40,14 @@ public class Clone_Skill_Controller : MonoBehaviour
         }
     }
 
-    // 初始化克隆体（克隆体的初始位置，克隆体的持续时间，克隆体是否可以攻击,克隆体的偏移量）
-    public void SetupClone(Transform _newTransform, float _cloneDuration, bool _canAttack, Vector3 _offset, Transform _closestEnemy, bool _canDuplicate, float _chanceToDuplicate)
+    // 初始化克隆体（克隆体的初始位置，克隆体的持续时间，克隆体是否可以攻击，克隆体的偏移量，最近敌人，是否允许duplicate，duplicate概率）
+    public void SetupClone(Transform _newTransform, float _cloneDuration, bool _canAttack, Vector3 _offset, Transform _closestEnemy, bool _canDuplicate, float _chanceToDuplicate, Player _player)
     {
+        // 是否可以攻击
         if (_canAttack)
             anim.SetInteger("AttackNumber", Random.Range(1, 4));
 
+        player = _player;
         transform.position = _newTransform.position + _offset;
         cloneTimer = _cloneDuration;
 
@@ -72,6 +75,8 @@ public class Clone_Skill_Controller : MonoBehaviour
             if (hit.GetComponent<Enemy>() != null)
             {
                 hit.GetComponent<Enemy>().DamageEffect();
+
+
 
 
                 // 若允许克隆技能再产生一个克隆体，有**概率再生产一个克隆体
@@ -107,7 +112,6 @@ public class Clone_Skill_Controller : MonoBehaviour
     // 寻找最近的敌人（self_fix）
     private Transform FindClosestEnemy()
     {
-        //Debug.Log(transform.position);
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 25);
 
         float closestDistance = Mathf.Infinity;
