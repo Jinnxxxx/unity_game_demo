@@ -58,27 +58,22 @@ public class Entity : MonoBehaviour
 
     }
 
-    // 不同角色不同减速效果
+    // 不同角色不同减速效果，不同需要减速的组件
     public virtual void SlowEntityBy(float _slowPercentage, float _slowDuration)
     {
         // slow the speed needed
         // invoke ReturnDefaultSpeed() after _slowDuration
     }
 
-    // 恢复animation速度
+    // 恢复animation速度，不同角色不同组件需要恢复
     protected virtual void ReturnDefaultSpeed()
     {
         anim.speed = 1;
     }
 
-    // 受击特效
-    public virtual void DamageEffect()
-    {
-        fx.StartCoroutine("FlashFX"); // 受击闪烁
-        StartCoroutine("HitKnockback"); // 受击位移
 
-        // Debug.Log(gameObject.name + "   was damaged");
-    }
+    // 受击特效
+    public virtual void DamageImpact() => StartCoroutine("HitKnockback"); // 受击位移
 
     // 受击位移
     protected virtual IEnumerator HitKnockback()
@@ -156,14 +151,7 @@ public class Entity : MonoBehaviour
     }
     #endregion
 
-    // 精灵透明度控制
-    public void MakeTransparent(bool _transparent)
-    {
-        if (_transparent)
-            sr.color = Color.clear;
-        else
-            sr.color = Color.white;
-    }
+    
 
 
     public virtual void Die()

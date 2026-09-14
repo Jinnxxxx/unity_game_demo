@@ -49,18 +49,22 @@
     <Analyzer Include="D:\work\UnityEditor\Unity 2023.2.22f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Stat.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerWallSlideState.cs" />
+    <Compile Include="Assets\Scripts\Item&amp;Inventory\InventoryItem.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerAimSwordState.cs" />
     <Compile Include="Assets\Scripts\Enemy\Skeleton\SkeletonMoveState.cs" />
     <Compile Include="Assets\Scripts\Enemy\EnemyState.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerDeadState.cs" />
+    <Compile Include="Assets\Scripts\Item&amp;Inventory\ItemData_Equipment.cs" />
     <Compile Include="Assets\Scripts\Skills\Blackhole_Skill.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerJumpState.cs" />
     <Compile Include="Assets\Scripts\Enemy\Skeleton\SkeletonGroundedState.cs" />
+    <Compile Include="Assets\Scripts\Controllers\Skill_Controllers\Blackhole_Hotkey_Controller.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerPrimaryAttackState.cs" />
-    <Compile Include="Assets\Character Stats.cs" />
     <Compile Include="Assets\Scripts\Skills\Dash_Skill.cs" />
+    <Compile Include="Assets\Scripts\UI\UI_HealthBar.cs" />
+    <Compile Include="Assets\Scripts\Controllers\Skill_Controllers\Crystal_Skill_Controller.cs" />
+    <Compile Include="Assets\Scripts\Controllers\ShockStrike_Controller.cs" />
     <Compile Include="Assets\Scripts\Enemy\Enemy.cs" />
     <Compile Include="Assets\Scripts\Enemy\Skeleton\SkeletonStunnedState.cs" />
     <Compile Include="Assets\Scripts\Enemy\Skeleton\SkeletonBattleState.cs" />
@@ -68,22 +72,24 @@
     <Compile Include="Assets\Scripts\Player\PlayerAnimationTriggers.cs" />
     <Compile Include="Assets\Scripts\Skills\Clone_Skill.cs" />
     <Compile Include="Assets\Scripts\Skills\SkillManager.cs" />
+    <Compile Include="Assets\Scripts\Controllers\Skill_Controllers\Blackhole_Skill_Controller.cs" />
     <Compile Include="Assets\Scripts\Enemy\Skeleton\SkeletonIdleState.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerIdleState.cs" />
+    <Compile Include="Assets\Scripts\Stats\Stat.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerAirState.cs" />
     <Compile Include="Assets\Scripts\Enemy\Skeleton\Enemy_SkeletonAnimationTriggers.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerBlackHoleState.cs" />
     <Compile Include="Assets\Scripts\ParallaxBackground.cs" />
-    <Compile Include="Assets\ShockStrike_Controller.cs" />
+    <Compile Include="Assets\Scripts\Stats\Character Stats.cs" />
     <Compile Include="Assets\Scripts\Entity.cs" />
+    <Compile Include="Assets\Scripts\UI\UI_ItemSlot.cs" />
+    <Compile Include="Assets\Scripts\Item&amp;Inventory\Inventory.cs" />
     <Compile Include="Assets\Scripts\Skills\Skill.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerDashState.cs" />
     <Compile Include="Assets\Scripts\Enemy\Skeleton\SkeletonDeadState.cs" />
-    <Compile Include="Assets\Scripts\Skills\Skill_Controllers\Clone_Skill_Controller.cs" />
     <Compile Include="Assets\Scripts\Enemy\Skeleton\SkeletonAttackState.cs" />
+    <Compile Include="Assets\Scripts\Stats\PlayerStats.cs" />
     <Compile Include="Assets\Scripts\Enemy\Skeleton\Enemy_Skeleton.cs" />
-    <Compile Include="Assets\Scripts\Skills\Skill_Controllers\Blackhole_Skill_Controller.cs" />
-    <Compile Include="Assets\Scripts\Skills\Skill_Controllers\Crystal_Skill_Controller.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerCounterAttackState.cs" />
     <Compile Include="Assets\Scripts\Player\Player.cs" />
     <Compile Include="Assets\Scripts\PlayerManager.cs" />
@@ -91,16 +97,18 @@
     <Compile Include="Assets\Scripts\Player\PlayerWallJumpState.cs" />
     <Compile Include="Assets\Scripts\Skills\Crystal_Skill.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerGroundedState.cs" />
+    <Compile Include="Assets\Scripts\Controllers\Skill_Controllers\Sword_Skill_Controller.cs" />
+    <Compile Include="Assets\Scripts\UI\UI_CraftSlot.cs" />
+    <Compile Include="Assets\Scripts\Item&amp;Inventory\ItemData.cs" />
     <Compile Include="Assets\Scripts\Enemy\EnemyStateMachine.cs" />
-    <Compile Include="Assets\Scripts\Skills\Skill_Controllers\Sword_Skill_Controller.cs" />
-    <Compile Include="Assets\EnemyStats.cs" />
-    <Compile Include="Assets\HealthBar_UI.cs" />
-    <Compile Include="Assets\PlayerStats.cs" />
+    <Compile Include="Assets\Scripts\UI\UI_EquipmentSlot.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerCatchSwordState.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerState.cs" />
+    <Compile Include="Assets\Scripts\Stats\EnemyStats.cs" />
+    <Compile Include="Assets\Scripts\Item&amp;Inventory\ItemObject.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerStateMachine.cs" />
+    <Compile Include="Assets\Scripts\Controllers\Skill_Controllers\Clone_Skill_Controller.cs" />
     <Compile Include="Assets\Scripts\Skills\Sword_Skill.cs" />
-    <Compile Include="Assets\Scripts\Skills\Skill_Controllers\Blackhole_Hotkey_Controller.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

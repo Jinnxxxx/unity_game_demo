@@ -5,7 +5,8 @@ using UnityEngine;
 public class EntityFX : MonoBehaviour
 {
 
-    private SpriteRenderer sr;
+    private SpriteRenderer sr; // spirte
+    private Canvas cr; // self_fix
 
     [Header("Flash FX")]
     [SerializeField] private float flashDuration; // 材质变换间隔
@@ -20,7 +21,23 @@ public class EntityFX : MonoBehaviour
     private void Start()
     {
         sr = GetComponentInChildren<SpriteRenderer>();
+        cr = GetComponentInChildren<Canvas>(); // self_fix
         orignalMat = sr.material; // 保存原材质
+    }
+
+    // 精灵透明度控制
+    public void MakeTransparent(bool _transparent)
+    {
+        if (_transparent)
+        {
+            sr.color = Color.clear; // sprite
+            cr.enabled = false; // self_fix
+        }
+        else
+        {
+            sr.color = Color.white;
+            cr.enabled = true; // self_fix
+        }
     }
 
     // 受击闪烁
