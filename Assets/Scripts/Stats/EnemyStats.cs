@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyStats : CharacterStats
 {
     private Enemy enemy;
+    private ItemDrop myDropSystem;
 
     [Header("Level details")]
     [SerializeField] private int level;
@@ -19,6 +20,7 @@ public class EnemyStats : CharacterStats
         base.Start();
 
         enemy = GetComponent<Enemy>();
+        myDropSystem = GetComponent<ItemDrop>();
     }
 
     private void ApplyLevelModifiers()
@@ -26,11 +28,11 @@ public class EnemyStats : CharacterStats
         Modify(strength);
         Modify(agility);
         Modify(intelligence);
-        Modify(vitality); 
+        Modify(vitality);
 
         Modify(damage);
         Modify(critChance);
-        Modify(critPower); 
+        Modify(critPower);
 
         Modify(maxHealth);
         Modify(armor);
@@ -61,7 +63,8 @@ public class EnemyStats : CharacterStats
     protected override void Die()
     {
         base.Die();
+        enemy.Die(); // 调用Enemy的die进入dieState  
 
-        enemy.Die(); // 调用Enemy的die进入dieState     
+        myDropSystem.DropItem(); // 调用ItemDrop的DropItem()
     }
 }

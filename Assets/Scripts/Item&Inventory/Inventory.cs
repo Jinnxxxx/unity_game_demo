@@ -203,10 +203,42 @@ public class Inventory : MonoBehaviour
         UpdateSlotUI(); // 更新所有Slot的UI
     }
 
-    // public bool CanCraft(ItemData_Equipment _itemToCraft, List<InventoryItem> _requiredMaterials)
-    // {
+    public bool CanCraft(ItemData_Equipment _itemToCraft, List<InventoryItem> _requiredMaterials)
+    {
+        List<InventoryItem> materialsToRemove = new List<InventoryItem>();
+        
+        // 遍历requiredMaterials，若stash中没有足够的材料，则返回false
+        for (int i = 0; i < _requiredMaterials.Count; i++)
+        {
+            if (stashDictrionary.TryGetValue(_requiredMaterials[i].data, out InventoryItem stashValue))
+            {
+                if (stashValue.stackSize < _requiredMaterials[i].stackSize)
+                {
+                    Debug.Log("not enough materials to craft this item");
+                    return false;
+                }
+                else
+                {
+                    materialsToRemove.Add(stashValue);
+                }
+            }
+            else
+            {
+                Debug.Log("not enough materials to craft this item");
+                return false;
+            }
+        }
 
-    // }
+        // 若材料足够，则移除inventory中的材料
+        for (int i = 0; i < materialsToRemove.Count; i++)
+        {
+            RemoveItem(materialsToRemove[i].data);
+        }
+
+        AddItem(_itemToCraft);
+        Debug.Log("here is your item " + _itemToCraft.name);
+        return true;
+    }
 
 
 
