@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyStats : CharacterStats
 {
     private Enemy enemy;
-    private ItemDrop myDropSystem;
+    private ItemDrop myDropSystem; // 物品掉落系统
 
     [Header("Level details")]
     [SerializeField] private int level;
@@ -23,6 +23,7 @@ public class EnemyStats : CharacterStats
         myDropSystem = GetComponent<ItemDrop>();
     }
 
+    // 应用等级提升的属性修改
     private void ApplyLevelModifiers()
     {
         Modify(strength);
@@ -65,6 +66,6 @@ public class EnemyStats : CharacterStats
         base.Die();
         enemy.Die(); // 调用Enemy的die进入dieState  
 
-        myDropSystem.DropItem(); // 调用ItemDrop的DropItem()
+        myDropSystem.GenerateDrop(); // 调用ItemDrop的GenerateDrop()
     }
 }

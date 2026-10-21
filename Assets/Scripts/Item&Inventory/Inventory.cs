@@ -4,12 +4,15 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
     public static Inventory instance; // 单例模式
+
+    public List<ItemData> startingItems; // 初始装备列表
 
     public List<InventoryItem> equipment; // 装备物品列表（用来遍历）
     public Dictionary<ItemData_Equipment, InventoryItem> equipmentDictrionary;
@@ -30,6 +33,10 @@ public class Inventory : MonoBehaviour
     private UI_ItemSlot[] inventoryItemSlot; // 背包Slots的UI列表
     private UI_ItemSlot[] stashItemSlot; // 储物Slots的UI列表
     private UI_EquipmentSlot[] equipmentSlot; // 装备Slots的UI列表
+
+
+    [Header("Items cooldown")]
+    private float lastTimeUsedFlask; // 上次使用生命药水的时间
 
 
     void Awake()
@@ -54,8 +61,21 @@ public class Inventory : MonoBehaviour
         inventoryItemSlot = inventorySlotParent.GetComponentsInChildren<UI_ItemSlot>(); // 初始化背包的Slot列表
         stashItemSlot = stashSlotParent.GetComponentsInChildren<UI_ItemSlot>(); // 初始化储物的Slot列表
         equipmentSlot = equipmentSlotParent.GetComponentsInChildren<UI_EquipmentSlot>(); // 初始化装备的Slot列表
+
+
+        AddStartingItems(); // 初始化player的初始装备
+
+        lastTimeUsedFlask = Mathf.NegativeInfinity; // self_fix:初始化上次使用生命药水的时间
     }
 
+    // 添加初始装备到Inventory
+    private void AddStartingItems()
+    {
+        for (int i = 0; i < startingItems.Count; i++)
+        {
+            AddItem(startingItems[i]);
+        }
+    }
 
     // 装备装备
     public void EquipItem(ItemData _item)
@@ -87,7 +107,7 @@ public class Inventory : MonoBehaviour
         UpdateSlotUI();
     }
 
-    // 卸下装备
+    // 卸下装备从inventory
     public void UnequipItem(ItemData_Equipment itemToRemove)
     {
         if (equipmentDictrionary.TryGetValue(itemToRemove, out InventoryItem value))
@@ -95,12 +115,19 @@ public class Inventory : MonoBehaviour
             equipment.Remove(value); // 移除装备列表中的旧装备
             equipmentDictrionary.Remove(itemToRemove); // 移除equipmentDictrionary中的旧装备
             itemToRemove.RemoveModifiers(); // 移除装备属性
+            UpdateSlotUI();
         }
     }
 
     // 更新所有Slot的UI（先清理再更新）
     private void UpdateSlotUI()
     {
+        // 清除装备槽位UI(self_fix)
+        for (int i = 0; i < equipmentSlot.Length; i++)
+        {
+            equipmentSlot[i].CleanUpSlot();
+        }
+
         // 遍历所有装备槽位，若装备Dictionary有相应装备，则更新图标至装备UI
         for (int i = 0; i < equipmentSlot.Length; i++)
         {
@@ -203,10 +230,11 @@ public class Inventory : MonoBehaviour
         UpdateSlotUI(); // 更新所有Slot的UI
     }
 
+    // 判断是否可以 craft
     public bool CanCraft(ItemData_Equipment _itemToCraft, List<InventoryItem> _requiredMaterials)
     {
         List<InventoryItem> materialsToRemove = new List<InventoryItem>();
-        
+
         // 遍历requiredMaterials，若stash中没有足够的材料，则返回false
         for (int i = 0; i < _requiredMaterials.Count; i++)
         {
@@ -240,6 +268,47 @@ public class Inventory : MonoBehaviour
         return true;
     }
 
+    // 获得当前装备列表
+    public List<InventoryItem> GetEquipmentList() => equipment;
 
+    // 获得当前储物列表
+    public List<InventoryItem> GetStashList() => stash;
+
+    // 获取指定type装备数据
+    public ItemData_Equipment GetEquipment(EquipmentType _type)
+    {
+        ItemData_Equipment equipedItem = null;
+
+        // 遍历equipmentDictrionary，找到_type的装备，若存在则返回装备数据
+        foreach (KeyValuePair<ItemData_Equipment, InventoryItem> item in equipmentDictrionary)
+        {
+            if (item.Key.equipmentType == _type)
+                equipedItem = item.Key;
+        }
+
+        return equipedItem; // 返回已装备物品数据
+    }
+
+    // 使用药水
+    public void UseFlask()
+    {
+        ItemData_Equipment currentFlask = GetEquipment(EquipmentType.Flask);
+
+        if (currentFlask == null)
+            return; // 若没有生命药水则返回
+
+        bool canUseFlask = Time.time > lastTimeUsedFlask + currentFlask.itemCooldown;
+
+        if (canUseFlask)
+        {
+            currentFlask.Effect(null);
+            lastTimeUsedFlask = Time.time; // 更新上次使用时间
+        }
+        else
+        {
+            Debug.Log("Flask is on cooldown");
+        }
+
+    }
 
 }

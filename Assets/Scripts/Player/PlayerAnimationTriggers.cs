@@ -22,12 +22,22 @@ public class PlayerAnimationTriggers : MonoBehaviour
         {
             if (hit.GetComponent<Enemy>() != null)
             {
-                EnemyStats _target = hit.GetComponent<EnemyStats>();
+                EnemyStats _target = hit.GetComponent<EnemyStats>(); // 获得目标的stats
 
-                player.stats.DoDamage(_target); //计算并造成伤害（包含动画）
+                if (_target != null)
+                    player.stats.DoDamage(_target); // 计算并造成伤害（包含动画）
+
+                // ItemData_Equipment weaponData = Inventory.instance.GetEquipment(EquipmentType.Weapon);
+                // if (weaponData != null)
+                //     weaponData.Effect(_target.transform); 
+
+                // 调用inventory的GetEquipment方法获取装备类型为Weapon的装备，并执行其effect
+                Inventory.instance.GetEquipment(EquipmentType.Weapon)?.Effect(_target.transform);
             }
         }
     }
+
+
 
     private void ThrowSword()
     {

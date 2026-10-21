@@ -46,8 +46,18 @@ public class UI_ItemSlot : MonoBehaviour, IPointerDownHandler
     // 鼠标点击装备可装备
     public virtual void OnPointerDown(PointerEventData eventData)
     {
+        if (item == null)
+            return;
+
+        // 按住ctrl键点击物品栏的物品时，移除该物品
+        if (Input.GetKey(KeyCode.LeftControl))
+        {
+            Inventory.instance.RemoveItem(item.data);
+            return;
+        }
+
+        // 如果物品类型是装备，则EquipItem
         if (item.data.itemType == ItemType.Equipment)
             Inventory.instance.EquipItem(item.data);
     }
-
 }

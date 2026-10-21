@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using NUnit.Framework;
 using UnityEngine;
 
 public class PlayerStats : CharacterStats
@@ -16,6 +17,8 @@ public class PlayerStats : CharacterStats
 
     public override void TakeDamage(int _damage)
     {
+        if (isDead)
+            return;
         base.TakeDamage(_damage); // 减少血量（包括血条UI）
     }
 
@@ -23,7 +26,8 @@ public class PlayerStats : CharacterStats
     protected override void Die()
     {
         base.Die();
-
         player.Die(); // 切换状态机
+
+        GetComponent<PlayerItemDrop>()?.GenerateDrop(); // 掉落物品
     }
 }

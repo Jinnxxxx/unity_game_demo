@@ -15,6 +15,10 @@ public class ItemData_Equipment : ItemData
 {
     public EquipmentType equipmentType; // 装备类型
 
+    public float itemCooldown; // 装备冷却时间
+
+    public ItemEffect[] itemEffects; // 装备效果
+
     [Header("Major stats")]
     public int strength;
     public int agility;
@@ -39,6 +43,16 @@ public class ItemData_Equipment : ItemData
 
     [Header("Craft requirements")]
     public List<InventoryItem> craftingMaterials; // 所需制作材料
+
+
+    // 遍历执行装备效果(传参为目标transform)
+    public void Effect(Transform _enemyPosition)
+    {
+        foreach (var item in itemEffects)
+        {
+            item.ExecuteEffect(_enemyPosition);
+        }
+    }
 
     public void AddModifiers()
     {

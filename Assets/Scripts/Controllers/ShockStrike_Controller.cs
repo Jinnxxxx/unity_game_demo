@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 public class ShockStrike_Controller : MonoBehaviour
 {
     [SerializeField] private CharacterStats targetStats;
-    [SerializeField] private float speed;
+    [SerializeField] private float speed; // 移动速度
     private int damage; // 伤害
 
     private Animator anim;

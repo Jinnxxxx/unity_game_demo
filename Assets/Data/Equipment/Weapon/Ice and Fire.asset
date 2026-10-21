@@ -10,23 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d1ff3f43701e62e479638ab3fc17c5da, type: 3}
-  m_Name: Wooden sword
+  m_Name: Ice and Fire
   m_EditorClassIdentifier: 
   itemType: 1
-  itemName: Wooden sword
-  icon: {fileID: 1025091068, guid: a9ca9a41598dd2e44b125928045c518f, type: 3}
+  itemName: Ice and Fire
+  icon: {fileID: 1398721256, guid: a9ca9a41598dd2e44b125928045c518f, type: 3}
+  dropChance: 6
   equipmentType: 0
+  itemCooldown: 0
+  itemEffects:
+  - {fileID: 11400000, guid: d51e9bf2a3a86da42af252ec31ad94d1, type: 2}
+  - {fileID: 11400000, guid: cc7224b8c782a174ea74760646aa8809, type: 2}
   strength: 0
   agility: 0
   intelligence: 0
   vitality: 0
-  damage: 4
+  damage: 10
   critChance: 0
   critPower: 0
-  health: 0
+  health: 15
   armor: 0
-  evasion: 3
+  evasion: 0
   magicResistance: 0
-  fireDamage: 0
-  iceDamage: 0
+  fireDamage: 5
+  iceDamage: 7
   lightingDamage: 0
+  craftingMaterials: []

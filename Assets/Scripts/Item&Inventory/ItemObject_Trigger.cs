@@ -10,7 +10,12 @@ public class ItemObject_Trigger : MonoBehaviour
     {
         if (collision.GetComponent<Player>() != null)
         {
-            // collider触碰到时，将ItemData添加到玩家的Inventory中
+            // 如果玩家死亡，不执行任何操作
+            if (collision.GetComponent<CharacterStats>().isDead)
+                return;
+
+            Debug.Log("Picked up item");
+            // collider触碰到player时，将ItemData添加到玩家的Inventory中
             myItemObject.PickupItem();
         }
     }

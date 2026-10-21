@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 
@@ -52,7 +53,7 @@ public class CharacterStats : MonoBehaviour
 
     public System.Action onHealthChanged; // 当角色生命值改变时触发的事件
 
-    protected bool isDead; // 角色是否死亡
+    public bool isDead { get; private set; } // 角色是否死亡
 
 
     protected virtual void Start()
@@ -88,8 +89,20 @@ public class CharacterStats : MonoBehaviour
 
 
 
+    // 增加角色某个属性值(增加量，持续时间，增加的属性值)(IEnumerator)
+    public virtual void IncreaseStatBy(int _modifier, float _duration, Stat _statToModify)
+    {
+        StartCoroutine(StatModCoroutine(_modifier, _duration, _statToModify));
+    }
 
-    // 计算并造成 物理(+魔法) 伤害
+    private IEnumerator StatModCoroutine(int _modifier, float _duration, Stat _statToModify)
+    {
+        _statToModify.AddModifier(_modifier);
+        yield return new WaitForSeconds(_duration); // 持续时间
+        _statToModify.RemoveModifier(_modifier);
+    }
+
+    // 计算并造成 物理(+魔法?) 伤害
     public virtual void DoDamage(CharacterStats _targetStats)
     {
         // 判断是否闪避攻击
@@ -109,9 +122,10 @@ public class CharacterStats : MonoBehaviour
         // 执行目标角色受到物理伤害
         _targetStats.TakeDamage(totalDamage);
 
-        // 执行目标角色受到魔法伤害
-        // DoMagicalDamage(_targetStats);
-        // if inventory current weapon has fire effect, then DoMagicalDamage(_targetStats);
+        // 执行目标角色受到魔法伤害?攻击造成魔法伤害？
+        // if inventory current weapon has fire effect, then DoMagicalDamage(_targetStats)？
+        DoMagicalDamage(_targetStats);
+
     }
 
 
@@ -288,7 +302,7 @@ public class CharacterStats : MonoBehaviour
     {
         if (igniteDamageTimer < 0)
         {
-            DecreaseHealthy(igniteDamage); // 减少血量（触发生命值改变事件）
+            DecreaseHealthBy(igniteDamage); // 减少血量（触发生命值改变事件）
 
             if (currentHealth <= 0 && !isDead)
             {
@@ -312,7 +326,7 @@ public class CharacterStats : MonoBehaviour
     // 执行造成伤害
     public virtual void TakeDamage(int _damage)
     {
-        DecreaseHealthy(_damage); // 减少血量（触发生命值改变事件）
+        DecreaseHealthBy(_damage); // 减少血量（触发生命值改变事件）
 
         GetComponent<Entity>().DamageImpact(); // 触发伤害特效
 
@@ -326,8 +340,21 @@ public class CharacterStats : MonoBehaviour
         // Debug.Log(name + " took damage : " + _damage);
     }
 
+
+    // 增加血量 
+    public virtual void IncreaseHealthBy(int _amount)
+    {
+        currentHealth += _amount; // 增加当前生命值
+
+        if (currentHealth > GetMaxHealthValue())
+            currentHealth = GetMaxHealthValue(); // 防止当前生命值超过最大生命值
+
+        onHealthChanged?.Invoke(); // 触发生命值改变事件
+    }
+
+
     // 减少血量（触发生命值改变事件）(需要减少血量的时候使用此函数)
-    public virtual void DecreaseHealthy(int _damage)
+    protected virtual void DecreaseHealthBy(int _damage)
     {
         currentHealth -= _damage;   // 减少当前生命值
 

@@ -7,7 +7,7 @@ using UnityEngine.Playables;
 public class PlayerPrimaryAttackState : PlayerState
 {
 
-    private int comboCounter;
+    public int comboCounter { get; private set; }
     private float lastTimeAttacked;
     private float comboWindwow = 2;
 

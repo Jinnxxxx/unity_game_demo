@@ -106,6 +106,10 @@ public class Player : Entity
         {
             skill.crystal.CanUseSkill();
         }
+
+        // 按下1使用药水
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            Inventory.instance.UseFlask();
     }
 
 

@@ -9,12 +9,11 @@ public class ItemObject : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D rb; // 刚体组件
     [SerializeField] private ItemData itemData; // 关联的ItemData
-    [SerializeField] private Vector2 velocity; // 物品掉落时初始速度
 
-    // 编辑器验证时
-    void OnValidate()
+
+    private void SetupVisuals()
     {
-        // 防报错
+        // 空值检查，防报错
         if (itemData == null)
             return;
 
@@ -22,18 +21,13 @@ public class ItemObject : MonoBehaviour
         gameObject.name = "Item object - " + itemData.itemName; // 设置GameObject名称为ItemData的itemName
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.M))
-            rb.velocity = velocity;
-    }
-
-
     // 初始化物品数据和初始速度
     public void SetupItem(ItemData _itemData, Vector2 _velocity)
     {
         itemData = _itemData;
         rb.velocity = _velocity;
+
+        SetupVisuals(); // 初始化物品图标和名字
     }
 
     // 将ItemData添加到玩家的Inventory中

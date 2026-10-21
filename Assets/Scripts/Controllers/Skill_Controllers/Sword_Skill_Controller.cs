@@ -231,9 +231,12 @@ public class Sword_Skill_Controller : MonoBehaviour
     // 剑技能造成伤害函数（统一使用）
     private void SwordSkillDamage(Enemy enemy)
     {
-        //enemy.DamageEffect();
         player.stats.DoDamage(enemy.GetComponent<CharacterStats>()); // 造成伤害
         enemy.StartCoroutine("FreezeTimerFor", freezeTimeDuration); // 冻结敌人
+
+        ItemData_Equipment equipedAmulet = Inventory.instance.GetEquipment(EquipmentType.Amulet);
+        if (equipedAmulet != null)
+            equipedAmulet.Effect(enemy.transform); // 执行装备效果
     }
 
     // 初始化周围敌人列表(enemyTarget)，供弹跳剑使用
